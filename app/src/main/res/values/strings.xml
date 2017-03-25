@@ -1,3 +1,34 @@
 <resources>
-    <string name="app_name">AndroidFinalProject</string>
+    <string name="app_name">המטייל</string>
+    <string name="action_sign_in_short">הירשם</string>
+    <string name="email">מייל</string>
+    <string name="minimum_password">הסיסמא שהזנת קצרה מידי, יש להזין לפחות 6 תווים!</string>
+    <string name="auth_failed">הזיהוי נכשל, אנא הזן את פרטיך שוב או שתירשם לאפליקציה</string>
+    <string name="send_password_reset_email">שלח איפוס סיסמא למייל</string>
+    <string name="title_activity_profile">פייר-בייס</string>
+    <string name="title_activity_login">התחברות</string>
+    <string name="hint_email">מייל</string>
+    <string name="hint_password">סיסמא</string>
+    <string name="hint_name">שם מלא</string>
+    <string name="btn_login">התחבר</string>
+    <string name="btn_link_to_register">משתמש חדש? הירשם למטייל עכשיו ובחינם!</string>
+    <string name="btn_link_to_login">כבר נרשמת למערכת? התחבר!</string>
+    <string name="title_activity_reset_password">איפוס סיסמא</string>
+    <string name="btn_forgot_password">שכחת את הסיסמא שלך?</string>
+    <string name="btn_reset_password">איפוס סיסמא</string>
+    <string name="btn_back"><![CDATA[>> חזור]]></string>
+    <string name="hint_new_email">מייל חדש</string>
+    <string name="btn_change">שינוי</string>
+    <string name="btn_send">שליחה</string>
+    <string name="btn_remove">הסרה</string>
+    <string name="btn_sign_out">התנתק</string>
+    <string name="lbl_forgot_password">שכחת את הסיסמא שלך?</string>
+    <string name="forgot_password_msg">אנו בסך הכל זקוקים למייל שלך על מנת לאפס את סיסמאתך</string>
+    <string name="title_activity_signup">הרשמה</string>
+    <string name="enter_mail">יש להזין כתובת מייל</string>
+    <string name="enter_password">יש להזין סיסמא</string>
+    <string name="short_password">הסיסמא שהוזנה קצרה מידי, יש להזין לפחות 6 תווים</string>
+    <string name="reset_instructions_sent">הנחיות לאיפוס סיסמא נשלחו בהצלחה למייל שלך!</string>
+    <string name="reset_failed">לא קיים משתמש עבור כתובת המייל שהוזנה</string>
+    <string name="bad_mail_format">יש להזין כתובת מייל חוקית</string>
 </resources>
