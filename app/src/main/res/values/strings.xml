@@ -31,4 +31,7 @@
     <string name="reset_instructions_sent">הנחיות לאיפוס סיסמא נשלחו בהצלחה למייל שלך!</string>
     <string name="reset_failed">לא קיים משתמש עבור כתובת המייל שהוזנה</string>
     <string name="bad_mail_format">יש להזין כתובת מייל חוקית</string>
+    <string name="log_out_success">התנתקת בהצלחה מהמערכת</string>
+    <string name="register_success">נרשמת בהצלחה למערכת</string>
+    <string name="register_failure">התרחשה שגיאה בהרשמה, אנא נסה שנית מאוחר יותר</string>
 </resources>

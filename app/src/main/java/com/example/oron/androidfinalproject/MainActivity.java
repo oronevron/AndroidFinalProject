@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,6 +30,14 @@ public class MainActivity extends AppCompatActivity {
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
 
+        // This piece of code will be used in the future to receive user details!
+        // Do not delete it for now!!
+//        FirebaseUser userCool = auth.getCurrentUser();
+//
+//        String displayName = userCool.getDisplayName();
+//        String userId = userCool.getUid();
+//        String email = userCool.getEmail();
+
         // Set authorize listener to handle change in the user state
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -39,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 // If user chose to log out
                 if (user == null) {
                     // user auth state is changed - user is null
+
                     // launch login activity
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();

@@ -106,15 +106,23 @@ public class SignupActivity extends AppCompatActivity {
                         .addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
-                                Toast.makeText(SignupActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+
                                 progressBar.setVisibility(View.GONE);
                                 // If sign in fails, display a message to the user. If sign in succeeds
                                 // the auth state listener will be notified and logic to handle the
                                 // signed in user can be handled in the listener.
                                 if (!task.isSuccessful()) {
-                                    Toast.makeText(SignupActivity.this, "Authentication failed." + task.getException(),
-                                            Toast.LENGTH_SHORT).show();
+                                    Toast toastFail = Toast.makeText(SignupActivity.this, getString(R.string.register_failure), Toast.LENGTH_LONG);
+                                    View toastViewFail = toastFail.getView();
+                                    toastViewFail.setBackgroundResource(R.color.input_register);
+                                    toastFail.show();
                                 } else {
+
+                                    Toast toastSuccess = Toast.makeText(SignupActivity.this, getString(R.string.register_success), Toast.LENGTH_LONG);
+                                    View toastViewSuccess = toastSuccess.getView();
+                                    toastViewSuccess.setBackgroundResource(R.color.input_register);
+                                    toastSuccess.show();
+
                                     startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                     finish();
                                 }

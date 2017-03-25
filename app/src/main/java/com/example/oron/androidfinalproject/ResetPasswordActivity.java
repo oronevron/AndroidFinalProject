@@ -71,9 +71,17 @@ public class ResetPasswordActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(ResetPasswordActivity.this, R.string.reset_instructions_sent, Toast.LENGTH_SHORT).show();
+                                    Toast toast = Toast.makeText(ResetPasswordActivity.this, getString(R.string.reset_instructions_sent), Toast.LENGTH_LONG);
+                                    View toastView = toast.getView();
+                                    toastView.setBackgroundResource(R.color.input_register);
+                                    toast.show();
+
+
                                 } else {
-                                    Toast.makeText(ResetPasswordActivity.this, R.string.reset_failed, Toast.LENGTH_SHORT).show();
+                                    Toast toast = Toast.makeText(ResetPasswordActivity.this, getString(R.string.reset_failed), Toast.LENGTH_LONG);
+                                    View toastView = toast.getView();
+                                    toastView.setBackgroundResource(R.color.input_register);
+                                    toast.show();
                                 }
 
                                 progressBar.setVisibility(View.GONE);
