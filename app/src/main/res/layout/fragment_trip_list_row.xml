@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layoutDirection="ltr"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.oron.androidfinalproject.TripListRowFragment">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/trips_list_row_top_margin"
+        android:layout_marginBottom="@dimen/trips_list_row_bottom_margin"
+        android:layout_weight="1">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/trip" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+                android:id="@+id/tripRowName"
+                android:layout_marginTop="@dimen/trips_list_row_top_margin"
+                android:layout_marginLeft="@dimen/trips_list_row_left_margin" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+                android:id="@+id/tripRowId"
+                android:layout_marginTop="@dimen/trips_list_row_top_margin"
+                android:layout_marginLeft="@dimen/trips_list_row_left_margin" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!--<CheckBox-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="0"-->
+        <!--android:id="@+id/tripRowCheckBox"-->
+        <!--android:focusable="false" />-->
+
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.oron.androidfinalproject;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
+
+    TripsListFragment tripsListFragment = new TripsListFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
                 // Get the current user
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                FragmentTransaction ftr = getFragmentManager().beginTransaction();
+                ftr.add(R.id.mainFirstContainer, tripsListFragment);
+                ftr.commit();
 
                 // If user chose to log out
                 if (user == null) {
