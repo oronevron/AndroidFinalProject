@@ -38,6 +38,9 @@
         <activity
             android:name=".TripDetailsActivity"
             android:label="@string/trip_details_activity_label" />
+        <activity
+            android:name=".NewTripActivity"
+            android:label="@string/new_trip_activity_label" />
     </application>
 
 </manifest>

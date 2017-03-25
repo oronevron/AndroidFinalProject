@@ -1,5 +1,6 @@
 package com.example.oron.androidfinalproject;
 
+import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
+import com.example.oron.androidfinalproject.Model.Model;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,6 +70,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // New trip has been created
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                tripsListFragment.getAdapter().notifyDataSetChanged();
+                tripsListFragment.getList().setSelection(Model.getInstance().getAllTrips().size());
+            }
+        }
+
+//        // Trip has been deleted
+//        else if (requestCode == 2) {
+//            if (resultCode == Activity.RESULT_FIRST_USER) {
+//                tripsListFragment.getAdapter().notifyDataSetChanged();
+//                tripsListFragment.getList().setSelection(0);
+//            }
+//
+//            // Trip has been edited
+//            else if (resultCode == Activity.RESULT_OK) {
+//                tripsListFragment.getAdapter().notifyDataSetChanged();
+//                tripsListFragment.getList().setSelection((int)data.getExtras().get("tripIndex"));
+//            }
+//        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
 
@@ -79,6 +108,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Handle menu action according to item id
         switch (item.getItemId()) {
+
+            // Handle click on new trip button
+            case R.id.new_trip_button:
+
+                Intent intent = new Intent(getApplicationContext(), NewTripActivity.class);
+                startActivityForResult(intent, 1);
+
+                return true;
 
             // If user chose to sign out
             case R.id.sign_out_button:

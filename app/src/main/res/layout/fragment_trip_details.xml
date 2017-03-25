@@ -64,12 +64,12 @@
             <!--android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"-->
             <!--android:layout_margin="@dimen/trips_details_margin" />-->
 
-        <TextView
-            android:id="@+id/trip_details_birth_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-            android:layout_margin="@dimen/trips_details_margin" />
+        <!--<TextView-->
+            <!--android:id="@+id/trip_details_birth_time"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"-->
+            <!--android:layout_margin="@dimen/trips_details_margin" />-->
 
     </LinearLayout>
 

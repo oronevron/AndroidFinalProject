@@ -1,8 +1,8 @@
 package com.example.oron.androidfinalproject.Model;
 
 public class Trip {
-    private String id;
     private String name;
+    private String id;
     private String type;
     private int age_min;
     private int age_max;
@@ -14,9 +14,9 @@ public class Trip {
 //    private int hourOfDay;
 //    private int minute;
 
-    public Trip(String id, String name, String type, int age_min, int age_max, int difficulty) {// int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
-        this.id = id;
+    public Trip(String name, String id, String type, int age_min, int age_max, int difficulty) {// int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
         this.name = name;
+        this.id = id;
         this.type = type;
         this.age_min = age_min;
         this.age_max = age_max;

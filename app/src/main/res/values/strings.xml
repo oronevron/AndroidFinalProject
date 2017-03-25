@@ -41,14 +41,27 @@
     <!--Main Activity-->
     <string name="new_trip_button">+</string>
 
+    <!--New Trip Activity-->
+    <string name="new_trip_activity_label">הוספת טיול חדש</string>
+    <string name="new_trip_save_button">שמירה</string>
+    <string name="new_trip_cancel_button">ביטול</string>
+
     <!--Trip Details Activity-->
     <string name="trip_details_activity_label">פרטי הטיול</string>
-    <string name="edit_trip_button">ערוך</string>
+    <string name="edit_trip_button">עריכה</string>
 
     <!--General-->
     <string name="name">שם:</string>
     <string name="id">id:</string>
-    <string name="type">סןג:</string>
+    <string name="type">סוג:</string>
     <string name="difficulty">רמת קושי:</string>
+
+    <!--Error Messages-->
+    <string name="action_canceled_message">Action canceled</string>
+    <string name="new_or_edit_trip_error_message">You must fill all fields!</string>
+    <string name="new_trip_success_message">The trip created successfully</string>
+    <string name="edit_trip_success_message">The trip edited successfully</string>
+    <string name="edit_trip_error_message">Please change at least one field!</string>
+    <string name="edit_trip_delete_message">The trip deleted successfully</string>
 
 </resources>
