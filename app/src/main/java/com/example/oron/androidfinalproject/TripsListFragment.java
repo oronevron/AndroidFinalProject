@@ -57,9 +57,9 @@ public class TripsListFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Intent intent = new Intent(getActivity().getApplicationContext(), TripDetailsActivity.class);
-//                intent.putExtra("tripIndex", i);
-//                getActivity().startActivityForResult(intent, 2);
+                Intent intent = new Intent(getActivity().getApplicationContext(), TripDetailsActivity.class);
+                intent.putExtra("tripIndex", i);
+                getActivity().startActivityForResult(intent, 2);
             }
         });
 

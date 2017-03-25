@@ -1,5 +1,8 @@
 <resources>
+
+    <!--Application-->
     <string name="app_name">המטייל</string>
+
     <string name="action_sign_in_short">הירשם</string>
     <string name="email">מייל</string>
     <string name="minimum_password">הסיסמא שהזנת קצרה מידי, יש להזין לפחות 6 תווים!</string>
@@ -34,4 +37,18 @@
     <string name="log_out_success">התנתקת בהצלחה מהמערכת</string>
     <string name="register_success">נרשמת בהצלחה למערכת</string>
     <string name="register_failure">התרחשה שגיאה בהרשמה, אנא נסה שנית מאוחר יותר</string>
+
+    <!--Main Activity-->
+    <string name="new_trip_button">+</string>
+
+    <!--Trip Details Activity-->
+    <string name="trip_details_activity_label">פרטי הטיול</string>
+    <string name="edit_trip_button">ערוך</string>
+
+    <!--General-->
+    <string name="name">שם:</string>
+    <string name="id">id:</string>
+    <string name="type">סןג:</string>
+    <string name="difficulty">רמת קושי:</string>
+
 </resources>

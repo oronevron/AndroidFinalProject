@@ -35,6 +35,9 @@
         <activity android:name=".ResetPasswordActivity"
                   android:label="Reset Password"
                   android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".TripDetailsActivity"
+            android:label="@string/trip_details_activity_label" />
     </application>
 
 </manifest>
