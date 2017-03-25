@@ -30,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FragmentTransaction ftr = getFragmentManager().beginTransaction();
+        ftr.add(R.id.mainFirstContainer, tripsListFragment);
+        ftr.commit();
+
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
 
@@ -48,10 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
                 // Get the current user
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-
-                FragmentTransaction ftr = getFragmentManager().beginTransaction();
-                ftr.add(R.id.mainFirstContainer, tripsListFragment);
-                ftr.commit();
 
                 // If user chose to log out
                 if (user == null) {
