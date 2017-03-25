@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Add the trip details fragment
         FragmentTransaction ftr = getFragmentManager().beginTransaction();
         ftr.add(R.id.mainFirstContainer, tripsListFragment);
         ftr.commit();
