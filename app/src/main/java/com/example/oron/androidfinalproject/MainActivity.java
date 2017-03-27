@@ -81,19 +81,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-//        // Trip has been deleted
-//        else if (requestCode == 2) {
-//            if (resultCode == Activity.RESULT_FIRST_USER) {
-//                tripsListFragment.getAdapter().notifyDataSetChanged();
-//                tripsListFragment.getList().setSelection(0);
-//            }
-//
-//            // Trip has been edited
-//            else if (resultCode == Activity.RESULT_OK) {
-//                tripsListFragment.getAdapter().notifyDataSetChanged();
-//                tripsListFragment.getList().setSelection((int)data.getExtras().get("tripIndex"));
-//            }
-//        }
+        // Trip has been deleted
+        else if (requestCode == 2) {
+            if (resultCode == Activity.RESULT_FIRST_USER) {
+                tripsListFragment.getAdapter().notifyDataSetChanged();
+                tripsListFragment.getList().setSelection(0);
+            }
+
+            // Trip has been edited
+            else if (resultCode == Activity.RESULT_OK) {
+                tripsListFragment.getAdapter().notifyDataSetChanged();
+                tripsListFragment.getList().setSelection((int)data.getExtras().get("tripIndex"));
+            }
+        }
     }
 
     @Override

@@ -46,6 +46,12 @@
     <string name="new_trip_save_button">שמירה</string>
     <string name="new_trip_cancel_button">ביטול</string>
 
+    <!--Edit Trip Activity-->
+    <string name="edit_trip_activity_label">Edit Trip</string>
+    <string name="edit_trip_save_button">SAVE</string>
+    <string name="edit_trip_delete_button">DELETE</string>
+    <string name="edit_trip_cancel_button">CANCEL</string>
+
     <!--Trip Details Activity-->
     <string name="trip_details_activity_label">פרטי הטיול</string>
     <string name="edit_trip_button">עריכה</string>
