@@ -4,11 +4,12 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-public class TripDetailsActivity extends Activity {
+public class TripDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,30 +49,29 @@ public class TripDetailsActivity extends Activity {
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.activity_trip_details_menu, menu);
-//
-//        return super.onCreateOptionsMenu(menu);
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_trip_details_menu, menu);
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.edit_trip_button:
-//
-//                // Handle click on edit button
-//                Intent intent = getIntent();
-//                int index = (int) intent.getExtras().get("tripIndex");
-//                Intent intentNew = new Intent(getApplicationContext(), EditTripActivity.class);
-//                intentNew.putExtra("tripIndex", index);
-//                startActivityForResult(intentNew, 1);
-//
-//                return true;
-//
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.edit_trip_button:
+
+                // Handle click on edit button
+                Intent intent = getIntent();
+                int index = (int) intent.getExtras().get("tripIndex");
+                Intent intentNew = new Intent(getApplicationContext(), EditTripActivity.class);
+                intentNew.putExtra("tripIndex", index);
+                startActivityForResult(intentNew, 1);
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

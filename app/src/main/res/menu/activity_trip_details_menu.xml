@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:compat="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/edit_trip_button"
+        android:title="@string/edit_trip_button"
+        compat:showAsAction="ifRoom"/>
+
+</menu>

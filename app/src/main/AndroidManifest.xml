@@ -41,6 +41,8 @@
         <activity
             android:name=".NewTripActivity"
             android:label="@string/new_trip_activity_label" />
+        <activity android:name=".EditTripActivity"
+            android:label="@string/edit_trip_activity_label"></activity>
     </application>
 
 </manifest>
