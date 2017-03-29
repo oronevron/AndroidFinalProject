@@ -1,5 +1,10 @@
 package com.example.oron.androidfinalproject.Model;
 
+import com.google.firebase.database.ServerValue;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Trip {
     private String name;
     private String id;
@@ -7,6 +12,7 @@ public class Trip {
     private int age_min;
     private int age_max;
     private int difficulty;
+    private String imageName;
 //    private Boolean isChecked = false;
 //    private int year;
 //    private int monthOfYear;
@@ -28,6 +34,8 @@ public class Trip {
 //        this.hourOfDay = hourOfDay;
 //        this.minute = minute;
     }
+
+    public Trip() {}
 
     public String getId() {
         return id;
@@ -75,5 +83,25 @@ public class Trip {
 
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+//        result.put("id", id);
+        result.put("name", name);
+//        result.put("imageName", imageName);
+        result.put("type", type);
+        result.put("difficulty", difficulty);
+//        result.put("checked", checked);
+        result.put("lastUpdated", ServerValue.TIMESTAMP);
+        return result;
     }
 }
