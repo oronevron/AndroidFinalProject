@@ -5,8 +5,8 @@ public class Trip {
     private String id;
     private String type;
     private int age_min;
-    private int age_max;
     private int difficulty;
+    private String image_name;
 //    private Boolean isChecked = false;
 //    private int year;
 //    private int monthOfYear;
@@ -14,13 +14,13 @@ public class Trip {
 //    private int hourOfDay;
 //    private int minute;
 
-    public Trip(String name, String id, String type, int age_min, int age_max, int difficulty) {// int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
+    public Trip(String name, String id, String type, int age_min, int difficulty, String image_name) {// int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
         this.name = name;
         this.id = id;
         this.type = type;
         this.age_min = age_min;
-        this.age_max = age_max;
         this.difficulty = difficulty;
+        this.image_name = image_name;
 //        this.isChecked = isChecked;
 //        this.year = year;
 //        this.monthOfYear = monthOfYear;
@@ -61,19 +61,19 @@ public class Trip {
         this.age_min = age_min;
     }
 
-    public int getAge_max() {
-        return age_max;
-    }
-
-    public void setAge_max(int age_max) {
-        this.age_max = age_max;
-    }
-
     public int getDifficulty() {
         return difficulty;
     }
 
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public String getImageName() {
+        return image_name;
+    }
+
+    public void setImageName(String image_name) {
+        this.image_name = image_name;
     }
 }
