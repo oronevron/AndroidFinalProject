@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.oron.androidfinalproject.Model.Model;
 import com.example.oron.androidfinalproject.Model.Trip;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -23,7 +24,8 @@ import java.util.List;
  */
 public class TripsListFragment extends Fragment {
 
-    List<Trip> tripsList;
+//    List<Trip> tripsList;
+    List<Trip> tripsList = new LinkedList<>();
     ListView list;
     TripsAdapter adapter;
 
@@ -44,7 +46,20 @@ public class TripsListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Get all trips
-        tripsList = Model.getInstance().getAllTrips();
+//        tripsList = Model.getInstance().getAllTrips();
+        Model.getInstance().getAllTripsAsynch(new Model.GetTripsListener() {
+            @Override
+            public void onResult(List<Trip> trips) {
+//                progressBar.setVisibility(View.GONE);
+                tripsList = trips;
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
 
         View view = inflater.inflate(R.layout.fragment_trips_list, container, false);
 
