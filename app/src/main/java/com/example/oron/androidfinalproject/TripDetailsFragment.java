@@ -30,8 +30,18 @@ public class TripDetailsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_trip_details, container, false);
 
-        int index = this.getArguments().getInt("tripIndex");
-        Trip trip = Model.getInstance().getTripByIndex(index);
+//        int index = this.getArguments().getInt("tripIndex");
+//        Trip trip = Model.getInstance().getTripByIndex(index);
+
+
+
+
+        String index = this.getArguments().getString("tripIndex");
+        Trip trip = Model.getInstance().getTripById(index);
+
+
+
+
 
         TextView nameTv = (TextView) view.findViewById(R.id.trip_details_name);
         nameTv.setText("name: " + trip.getName());
