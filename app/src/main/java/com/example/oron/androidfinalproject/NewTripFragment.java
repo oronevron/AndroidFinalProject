@@ -11,13 +11,20 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.oron.androidfinalproject.Model.Model;
 import com.example.oron.androidfinalproject.Model.Trip;
+
+import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,6 +38,7 @@ public class NewTripFragment extends Fragment {
     ImageView imageView = null;
     String imageFileName = null;
     Bitmap imageBitmap = null;
+    int difficulty = 0;
 
 
     public NewTripFragment() {
@@ -44,6 +52,61 @@ public class NewTripFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_new_trip, container, false);
         imageView = (ImageView) view.findViewById(R.id.new_trip_imageview);
+
+        // Populate spinner values
+        Spinner spinner = (Spinner) view.findViewById(R.id.types_spinner);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.types_array, android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+        // Handle seek bar change event
+        SeekBar seekBar = (SeekBar) view.findViewById(R.id.new_trip_difficulty);
+
+        seekBar.setOnSeekBarChangeListener(
+                new OnSeekBarChangeListener() {
+
+
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar,
+                                                  int progresValue, boolean fromUser) {
+
+                        // Get the trip difficulty text view
+                        TextView textView = (TextView) view.findViewById(R.id.new_trip_difficulty_value);
+
+                        switch (progresValue) {
+                            case 0: textView.setText(getResources().getString(R.string.very_easy));
+                                    difficulty = 0;
+                                    break;
+                            case 1: textView.setText(getResources().getString(R.string.easy));
+                                    difficulty = 1;
+                                    break;
+                            case 2: textView.setText(getResources().getString(R.string.medium));
+                                    difficulty = 2;
+                                    break;
+                            case 3: textView.setText(getResources().getString(R.string.hard));
+                                    difficulty = 3;
+                                    break;
+                            case 4: textView.setText(getResources().getString(R.string.very_hard));
+                                    difficulty = 4;
+                                    break;
+                        }
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                    }
+                });
 
         // Handle click on cancel button
         Button cancelBtn = (Button) view.findViewById(R.id.new_trip_cancel_button);
@@ -69,7 +132,7 @@ public class NewTripFragment extends Fragment {
                 String name;
                 String id;
                 String type;
-                int difficulty;
+//                int difficulty;
                 Boolean isChecked;
                 int year;
                 int monthOfYear;
@@ -81,14 +144,8 @@ public class NewTripFragment extends Fragment {
                 name = nameEt.getText().toString();
                 EditText idEt = (EditText) view.findViewById(R.id.new_trip_id);
                 id = idEt.getText().toString();
-                EditText typeEt = (EditText) view.findViewById(R.id.new_trip_type);
-                type = typeEt.getText().toString();
-                EditText difficultyEt = (EditText) view.findViewById(R.id.new_trip_difficulty);
-                try {
-                    difficulty = Integer.parseInt(difficultyEt.getText().toString());
-                } catch (NumberFormatException e) {
-                    difficulty = 0;
-                }
+                Spinner spinner = (Spinner) view.findViewById(R.id.types_spinner);
+                type = spinner.getSelectedItem().toString();
 //                CheckBox checkedCb = (CheckBox) view.findViewById(R.id.new_trip_checked);
 //                isChecked = checkedCb.isChecked();
 //                InputDateTextView birthDateIdtv = (InputDateTextView) view.findViewById(R.id.new_trip_birth_date);
@@ -100,7 +157,7 @@ public class NewTripFragment extends Fragment {
 //                minute = birthTimeIdtv.getMinute();
 
                 // Check that there is no empty field
-                if (name != null && !name.isEmpty() && id != null && !id.isEmpty() && type != null && !type.isEmpty() && difficulty != 0) {
+                if (name != null && !name.isEmpty() && id != null && !id.isEmpty() && type != null && !type.isEmpty()) {
 //                    Model.getInstance().addTrip(new Trip(name, id, phone, address, isChecked, year, monthOfYear, dayOfMonth, hourOfDay, minute));
 
                     final Trip trip = new Trip(name, id, type, 0, difficulty, null);
