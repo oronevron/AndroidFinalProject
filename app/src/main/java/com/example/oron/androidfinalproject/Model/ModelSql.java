@@ -6,12 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
-/**
- * Created by Or Natan on 29/03/2017.
- */
-
 public class ModelSql {
-    final static int VERSION = 1;
+    final static int VERSION = 2;
 
     Helper sqlDb;
 

@@ -7,10 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Or Natan on 29/03/2017.
- */
-
 public class TripSql {
     final static String TRIP_TABLE = "trips";
     final static String TRIP_TABLE_ID = "_id";
@@ -59,7 +55,7 @@ public class TripSql {
         return trips;
     }
 
-    public static Trip getStudentById(SQLiteDatabase db, String id) {
+    public static Trip getTripById(SQLiteDatabase db, String id) {
         String where = TRIP_TABLE_ID + " = ?";
         String[] args = {id};
         Cursor cursor = db.query(TRIP_TABLE, null, where, args, null, null, null);
@@ -83,14 +79,14 @@ public class TripSql {
         return null;
     }
 
-    public static void add(SQLiteDatabase db, Trip st) {
+    public static void add(SQLiteDatabase db, Trip trip) {
         ContentValues values = new ContentValues();
-        values.put(TRIP_TABLE_ID, st.getId());
-        values.put(TRIP_TABLE_NAME, st.getName());
-        values.put(TRIP_TABLE_TYPE, st.getType());
-        values.put(TRIP_TABLE_AGE_MIN, st.getAge_min());
-        values.put(TRIP_TABLE_DIFFICULTY, st.getDifficulty());
-        values.put(TRIP_TABLE_IMAGE_NAME, st.getImageName());
+        values.put(TRIP_TABLE_ID, trip.getId());
+        values.put(TRIP_TABLE_NAME, trip.getName());
+        values.put(TRIP_TABLE_TYPE, trip.getType());
+        values.put(TRIP_TABLE_AGE_MIN, trip.getAge_min());
+        values.put(TRIP_TABLE_DIFFICULTY, trip.getDifficulty());
+        values.put(TRIP_TABLE_IMAGE_NAME, trip.getImageName());
         db.insertWithOnConflict(TRIP_TABLE, TRIP_TABLE_ID, values,SQLiteDatabase.CONFLICT_REPLACE);
     }
 
