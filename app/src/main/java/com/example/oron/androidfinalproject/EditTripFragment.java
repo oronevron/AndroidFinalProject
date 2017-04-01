@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,11 @@ public class EditTripFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_edit_trip, container, false);
 
-        final int index = this.getArguments().getInt("tripIndex");
-        Trip trip = Model.getInstance().getTripByIndex(index);
+//        final int index = this.getArguments().getInt("tripIndex");
+//        Trip trip = Model.getInstance().getTripByIndex(index);
+
+        final String index = this.getArguments().getString("tripIndex");
+        final Trip trip = Model.getInstance().getTripById(index);
 
         EditText nameEt = (EditText) view.findViewById(R.id.edit_trip_name);
         nameEt.setText(trip.getName());
@@ -79,16 +83,28 @@ public class EditTripFragment extends Fragment {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Model.getInstance().deleteTrip(index);
+                //TODO
+//                Model.getInstance().deleteTrip(index);
 
-                DialogFragment dialog = new MessagesAlertDialog();
-                Bundle args = new Bundle();
-                args.putInt("resultCode", Activity.RESULT_FIRST_USER);
-                args.putInt("messageCode", R.string.edit_trip_delete_message);
-                args.putBoolean("isMessageOnly", false);
-                args.putBoolean("isTripIndexSent", false);
-                dialog.setArguments(args);
-                dialog.show(getFragmentManager(), "TAG");
+
+                Model.getInstance().deleteTrip(index, new Model.DeleteTripListener() {
+                    @Override
+                    public void onResult(String id) {
+                        DialogFragment dialog = new MessagesAlertDialog();
+                        Bundle args = new Bundle();
+                        args.putInt("resultCode", Activity.RESULT_FIRST_USER);
+                        args.putInt("messageCode", R.string.edit_trip_delete_message);
+                        args.putBoolean("isMessageOnly", false);
+                        args.putBoolean("isTripIndexSent", false);
+                        dialog.setArguments(args);
+                        dialog.show(getFragmentManager(), "TAG");
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                });
             }
         });
 
@@ -136,19 +152,34 @@ public class EditTripFragment extends Fragment {
                     // Check if there is at least one change in trip details
                     if (!name.equals(previousTripDetails.getName()) || !id.equals(previousTripDetails.getId()) || !type.equals(previousTripDetails.getType()) || difficulty != previousTripDetails.getDifficulty()) {// || !isChecked.equals(previousTripDetails.getChecked()) ||
 //                    year != previousTripDetails.getYear() || monthOfYear != previousTripDetails.getMonthOfYear() || dayOfMonth != previousTripDetails.getDayOfMonth() || hourOfDay != previousTripDetails.getHourOfDay() || minute != previousTripDetails.getMinute())  {
-                        Model.getInstance().editTrip(new Trip(name, id, type, 0, difficulty, null), index);//, isChecked, year, monthOfYear, dayOfMonth, hourOfDay, minute), index);
-                        Intent intent = new Intent();
-                        intent.putExtra("tripIndex", index);
 
-                        DialogFragment dialog = new MessagesAlertDialog();
-                        Bundle args = new Bundle();
-                        args.putInt("resultCode", Activity.RESULT_OK);
-                        args.putInt("messageCode", R.string.edit_trip_success_message);
-                        args.putBoolean("isMessageOnly", false);
-                        args.putBoolean("isTripIndexSent", true);
-                        args.putInt("tripIndex", index);
-                        dialog.setArguments(args);
-                        dialog.show(getFragmentManager(), "TAG");
+                        //TODO
+//                        Model.getInstance().editTrip(new Trip(name, id, type, 0, difficulty, null), index);//, isChecked, year, monthOfYear, dayOfMonth, hourOfDay, minute), index);
+
+
+                        Model.getInstance().editTrip(new Trip(name, id, type, 0, difficulty, null), new Model.EditTripListener() {
+                            @Override
+                            public void onResult() {
+                                Intent intent = new Intent();
+                                intent.putExtra("tripIndex", index);
+
+                                DialogFragment dialog = new MessagesAlertDialog();
+                                Bundle args = new Bundle();
+                                args.putInt("resultCode", Activity.RESULT_OK);
+                                args.putInt("messageCode", R.string.edit_trip_success_message);
+                                args.putBoolean("isMessageOnly", false);
+                                args.putBoolean("isTripIndexSent", true);
+//                        args.putInt("tripIndex", index);
+                                args.putString("tripIndex", index);
+                                dialog.setArguments(args);
+                                dialog.show(getFragmentManager(), "TAG");
+                            }
+
+                            @Override
+                            public void onCancel() {
+
+                            }
+                        });
                     }
                     else {
                         DialogFragment dialog = new MessagesAlertDialog();

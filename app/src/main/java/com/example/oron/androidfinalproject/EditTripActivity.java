@@ -14,9 +14,11 @@ public class EditTripActivity extends Activity {
 
         // Get trip details and show them
         Intent intent = getIntent();
-        int index = (int) intent.getExtras().get("tripIndex");
+//        int index = (int) intent.getExtras().get("tripIndex");
+        String index = intent.getExtras().get("tripIndex").toString();
         Bundle bundle = new Bundle();
-        bundle.putInt("tripIndex", index);
+//        bundle.putInt("tripIndex", index);
+        bundle.putString("tripIndex", index);
 
         EditTripFragment editTripFragment = new EditTripFragment();
         editTripFragment.setArguments(bundle);
