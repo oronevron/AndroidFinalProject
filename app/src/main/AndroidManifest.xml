@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="המטייל"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".SignupActivity"
@@ -48,7 +48,8 @@
             android:label="@string/trip_details_activity_label" />
         <activity
             android:name=".NewTripActivity"
-            android:label="@string/new_trip_activity_label" />
+            android:label="@string/new_trip_activity_label"
+            android:theme="@style/AppTheme.NoYellow"/>
         <activity android:name=".EditTripActivity"
             android:label="@string/edit_trip_activity_label"></activity>
     </application>
