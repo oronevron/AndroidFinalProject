@@ -79,7 +79,7 @@ public class TripSql {
         return null;
     }
 
-    public static void add(SQLiteDatabase db, Trip trip) {
+    public static void addTrip(SQLiteDatabase db, Trip trip) {
         ContentValues values = new ContentValues();
         values.put(TRIP_TABLE_ID, trip.getId());
         values.put(TRIP_TABLE_NAME, trip.getName());
@@ -87,7 +87,17 @@ public class TripSql {
         values.put(TRIP_TABLE_AGE_MIN, trip.getAge_min());
         values.put(TRIP_TABLE_DIFFICULTY, trip.getDifficulty());
         values.put(TRIP_TABLE_IMAGE_NAME, trip.getImageName());
-        db.insertWithOnConflict(TRIP_TABLE, TRIP_TABLE_ID, values,SQLiteDatabase.CONFLICT_REPLACE);
+        db.insertWithOnConflict(TRIP_TABLE, TRIP_TABLE_ID, values, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    public static void deleteTrip(SQLiteDatabase db, String id) {
+        String where = TRIP_TABLE_ID + " = ?";
+        String[] args = {id};
+        db.delete(TRIP_TABLE, where, args);
+    }
+
+    public static void editTrip(SQLiteDatabase db, Trip trip) {
+        addTrip(db, trip);
     }
 
     public static double getLastUpdateDate(SQLiteDatabase db){

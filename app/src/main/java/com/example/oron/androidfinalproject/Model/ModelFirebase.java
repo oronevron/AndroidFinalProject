@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +34,9 @@ public class ModelFirebase {
                 final List<Trip> tripList = new LinkedList<Trip>();
                 for (DataSnapshot tripSnapshot : dataSnapshot.getChildren()) {
                     Trip trip = tripSnapshot.getValue(Trip.class);
+
+                    trip.setId(tripSnapshot.getKey());
+
                     Log.d("TAG", trip.getName() + " - " + trip.getId());
                     tripList.add(trip);
                 }
@@ -46,29 +50,57 @@ public class ModelFirebase {
         });
     }
 
-    public void getTripById(String id, final Model.GetTrip listener) {
+//    public void getTripById(String id, final Model.GetTrip listener) {
+//        DatabaseReference myRef = database.getReference("trips").child(id);
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                Trip trip = snapshot.getValue(Trip.class);
+//                Log.d("TAG", trip.getName() + " - " + trip.getId());
+//                listener.onResult(trip);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
+
+    public String addTrip(Trip trip) {
+        DatabaseReference myRef = database.getReference("trips");
+        String key = myRef.push().getKey();
+        myRef.child(key).setValue(trip.toMap());
+        return key;
+    }
+
+    public void deleteTrip(final String id, final Model.DeleteTripListener listener) {
         DatabaseReference myRef = database.getReference("trips").child(id);
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.removeValue(new DatabaseReference.CompletionListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                Trip trip = snapshot.getValue(Trip.class);
-                Log.d("TAG", trip.getName() + " - " + trip.getId());
-                listener.onResult(trip);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    listener.onResult(id);
+                } else {
+                    listener.onCancel();
+                }
             }
         });
     }
 
-    public void add(Trip trip) {
-        DatabaseReference myRef = database.getReference("trips");
-        String key = myRef.push().getKey();
-        myRef.child(key).setValue(trip.toMap());
+    public void editTrip(Trip trip, final Model.EditTripListener listener) {
+        DatabaseReference myRef = database.getReference("trips").child(trip.getId());
+        myRef.setValue(trip.toMap(), new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    if (databaseError == null) {
+                        listener.onResult();
+                    } else {
+                        listener.onCancel();
+                    }
+                }
+            });
     }
-
 
     public void saveImage(Bitmap imageBitmap, String name, final Model.SaveImageListener listener){
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -92,29 +124,58 @@ public class ModelFirebase {
             }
         });
     }
-//
-//
-//    public void getImage(String url, final Model.GetImageListener listener){
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        StorageReference httpsReference = storage.getReferenceFromUrl(url);
-//        final long ONE_MEGABYTE = 1024 * 1024;
-//        httpsReference.getBytes(3* ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-//            @Override
-//            public void onSuccess(byte[] bytes) {
-//                Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-//                listener.onSccess(image);
-//                // Data for "images/island.jpg" is returns, use this as needed
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(Exception exception) {
-//                Log.d("TAG",exception.getMessage());
-//                listener.onFail();
-//                // Handle any errors
-//            }
-//        });
-//
-//    }
+
+
+    public void getImage(String url, final Model.GetImageListener listener){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference httpsReference = storage.getReferenceFromUrl(url);
+        final long ONE_MEGABYTE = 1024 * 1024;
+        httpsReference.getBytes(3* ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                listener.onSccess(image);
+                // Data for "images/island.jpg" is returns, use this as needed
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(Exception exception) {
+                Log.d("TAG",exception.getMessage());
+                listener.onFail();
+                // Handle any errors
+            }
+        });
+
+    }
+
+    public void handleDatabaseChanges() {
+        database.getReference("trips").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                System.out.println("bla");
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                System.out.println("bla");
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                System.out.println("bla");
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                System.out.println("bla");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("bla");
+            }
+        });
+    }
 }
 
 

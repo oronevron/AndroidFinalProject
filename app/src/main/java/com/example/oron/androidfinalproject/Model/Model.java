@@ -2,6 +2,7 @@ package com.example.oron.androidfinalproject.Model;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -10,10 +11,13 @@ import android.webkit.URLUtil;
 import com.example.oron.androidfinalproject.MyApplication;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,6 +36,7 @@ public class Model {
 //        }
 
         modelFirebase = new ModelFirebase();
+        modelFirebase.handleDatabaseChanges();
         modelSql = new ModelSql(MyApplication.getAppContext());
     }
 
@@ -43,17 +48,17 @@ public class Model {
         return tripsData;
     }
 
-    public void addTrip(Trip trip){
-        tripsData.add(trip);
-    }
+//    public void addTrip(Trip trip){
+//        tripsData.add(trip);
+//    }
 
-    public void deleteTrip(int index){
-        tripsData.remove(index);
-    }
+//    public void deleteTrip(int index){
+//        tripsData.remove(index);
+//    }
 
-    public void editTrip(Trip trip, int index){
-        tripsData.set(index, trip);
-    }
+//    public void editTrip(Trip trip, int index){
+//        tripsData.set(index, trip);
+//    }
 
     public Trip getTripByIndex(int index) {
         return tripsData.get(index);
@@ -76,7 +81,7 @@ public class Model {
                     //3. update the local DB
                     double recentUpdate = lastUpdateDate;
                     for (Trip trip : trips) {
-                        TripSql.add(modelSql.getWritableDB(), trip);
+                        TripSql.addTrip(modelSql.getWritableDB(), trip);
                         if (trip.getLastUpdated() > recentUpdate) {
                             recentUpdate = trip.getLastUpdated();
                         }
@@ -100,17 +105,66 @@ public class Model {
         });
     }
 
-    public interface GetTrip{
-        public void onResult(Trip trip);
+    public List<Trip> refreshTripsList() {
+        return TripSql.getAllTrips(modelSql.getReadbleDB());
+    }
+
+//    public interface GetTrip{
+//        public void onResult(Trip trip);
+//        public void onCancel();
+//    }
+
+//    public void getTripById(String id, GetTrip listener){
+    public Trip getTripById(String id){
+//        modelFirebase.getTripById(id, listener);
+
+        return TripSql.getTripById(modelSql.getReadbleDB(), id);
+    }
+
+    public void addTrip(Trip trip){
+        String key = modelFirebase.addTrip(trip);
+        trip.setId(key);
+        TripSql.addTrip(modelSql.getWritableDB(), trip);
+    }
+
+    public interface DeleteTripListener{
+        public void onResult(String id);
         public void onCancel();
     }
 
-    public void getTripById(String id, GetTrip listener){
-        modelFirebase.getTripById(id, listener);
+    public void deleteTrip(String id, final DeleteTripListener listener){
+        modelFirebase.deleteTrip(id, new DeleteTripListener() {
+            @Override
+            public void onResult(String id) {
+                TripSql.deleteTrip(modelSql.getReadbleDB(), id);
+                listener.onResult(id);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
-    public void add(Trip trip){
-        modelFirebase.add(trip);
+    public interface EditTripListener{
+        public void onResult();
+        public void onCancel();
+    }
+
+    public void editTrip(final Trip trip, final EditTripListener listener){
+        modelFirebase.editTrip(trip, new EditTripListener() {
+            @Override
+            public void onResult() {
+                TripSql.editTrip(modelSql.getReadbleDB(), trip);
+                listener.onResult();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
     private String getLocalImageFileName(String url) {
@@ -169,5 +223,58 @@ public class Model {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public interface GetImageListener{
+        void onSccess(Bitmap image);
+        void onFail();
+    }
+
+    public void loadImage(final String url, final GetImageListener listener) {
+        //1. first try to find the image on the device
+        final String localFileName = getLocalImageFileName(url);
+        Bitmap image = loadImageFromFile(localFileName);
+        if (image == null) {                                      //if image not found - try downloading it from firebase
+            Log.d("TAG","fail reading cache image: " + localFileName);
+
+            modelFirebase.getImage(url, new GetImageListener() {
+                @Override
+                public void onSccess(Bitmap image) {
+                    //2.  save the image localy
+//                    String localFileName = getLocalImageFileName(url);
+                    Log.d("TAG","save image to cache: " + localFileName);
+                    saveImageToFile(image, localFileName);
+                    //3. return the image using the listener
+                    listener.onSccess(image);
+                }
+
+                @Override
+                public void onFail() {
+                    listener.onFail();
+                }
+            });
+        } else {
+            Log.d("TAG","OK reading cache image: " + localFileName);
+            listener.onSccess(image);
+        }
+    }
+
+    private Bitmap loadImageFromFile(String imageFileName){
+        Bitmap bitmap = null;
+        try {
+            File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+            File imageFile = new File(dir, imageFileName);
+
+            //File dir = context.getExternalFilesDir(null);
+            InputStream inputStream = new FileInputStream(imageFile);
+            bitmap = BitmapFactory.decodeStream(inputStream);
+            Log.d("tag","got image from cache: " + imageFileName);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 }
