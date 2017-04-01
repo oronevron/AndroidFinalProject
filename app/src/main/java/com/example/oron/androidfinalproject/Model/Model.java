@@ -20,7 +20,7 @@ import java.util.List;
 public class Model {
     private final static Model instance = new Model();
     ModelFirebase modelFirebase;
-//    ModelSql modelSql;
+    ModelSql modelSql;
     private List<Trip> tripsData = new LinkedList<Trip>();
 
     private Model() {
@@ -32,7 +32,7 @@ public class Model {
 //        }
 
         modelFirebase = new ModelFirebase();
-//        modelSql = new ModelSql(MyApplication.getAppContext());
+        modelSql = new ModelSql(MyApplication.getAppContext());
     }
 
     public static Model getInstance() {
@@ -66,8 +66,7 @@ public class Model {
 
     public void getAllTripsAsynch(final GetTripsListener listener){
         //1. get the last update date
-//        final double lastUpdateDate = TripSql.getLastUpdateDate(modelSql.getReadbleDB());
-        final double lastUpdateDate = 1;
+        final double lastUpdateDate = TripSql.getLastUpdateDate(modelSql.getReadbleDB());
 
         //2. get all trips records that where updated since last update date
         modelFirebase.getAllTripsAsynch(lastUpdateDate, new GetTripsListener() {
@@ -76,23 +75,22 @@ public class Model {
                 if(trips != null && trips.size() > 0) {
                     //3. update the local DB
                     double reacentUpdate = lastUpdateDate;
-                    for (Trip s : trips) {
-//                        TripSql.add(modelSql.getWritableDB(), s);
-//                        if (s.getLastUpdated() > reacentUpdate) {
-//                            reacentUpdate = s.getLastUpdated();
-//                        }
-//                        Log.d("TAG","updating: " + s.toString());
-//                    }
-//                    TripSql.setLastUpdateDate(modelSql.getWritableDB(), reacentUpdate);
+                    for (Trip trip : trips) {
+                        TripSql.add(modelSql.getWritableDB(), trip);
+                        if (trip.getLastUpdated() > reacentUpdate) {
+                            reacentUpdate = trip.getLastUpdated();
+                        }
+                        Log.d("TAG","updating: " + trip.toString());
+                    }
+                    TripSql.setLastUpdateDate(modelSql.getWritableDB(), reacentUpdate);
 
 
-                        tripsData.add(s);
+//                        tripsData.add(s);
                     }
 
-                }
                 //return the complete trip list to the caller
-//                List<Trip> res = TripSql.getAllTrips(modelSql.getReadbleDB());
-                listener.onResult(tripsData);
+                List<Trip> res = TripSql.getAllTrips(modelSql.getReadbleDB());
+                listener.onResult(res);
             }
 
             @Override
@@ -133,7 +131,7 @@ public class Model {
                 // 2. saving the file localy
                 String localName = getLocalImageFileName(url);
                 Log.d("TAG","cach image: " + localName);
-                saveImageToFile(imageBitmap,localName); // synchronously save image locally
+                saveImageToFile(imageBitmap, localName); // synchronously save image locally
                 listener.complete(url);
             }
             @Override

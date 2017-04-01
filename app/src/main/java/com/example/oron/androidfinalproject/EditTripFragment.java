@@ -56,7 +56,7 @@ public class EditTripFragment extends Fragment {
 
 
         // Save the initial trip details in temporary variable
-        previousTripDetails = new Trip(nameEt.getText().toString(), idEt.getText().toString(),typeEt.getText().toString(), 0, 0, Integer.parseInt(difficultyEt.getText().toString()));//, checkedCb.isChecked(), trip.getYear(), trip.getMonthOfYear(), trip.getDayOfMonth(), trip.getHourOfDay(), trip.getMinute());
+        previousTripDetails = new Trip(nameEt.getText().toString(), idEt.getText().toString(),typeEt.getText().toString(), 0, Integer.parseInt(difficultyEt.getText().toString()), null);//, checkedCb.isChecked(), trip.getYear(), trip.getMonthOfYear(), trip.getDayOfMonth(), trip.getHourOfDay(), trip.getMinute());
 
         // Handle click on cancel button
         Button cancelBtn = (Button) view.findViewById(R.id.edit_trip_cancel_button);
@@ -136,7 +136,7 @@ public class EditTripFragment extends Fragment {
                     // Check if there is at least one change in trip details
                     if (!name.equals(previousTripDetails.getName()) || !id.equals(previousTripDetails.getId()) || !type.equals(previousTripDetails.getType()) || difficulty != previousTripDetails.getDifficulty()) {// || !isChecked.equals(previousTripDetails.getChecked()) ||
 //                    year != previousTripDetails.getYear() || monthOfYear != previousTripDetails.getMonthOfYear() || dayOfMonth != previousTripDetails.getDayOfMonth() || hourOfDay != previousTripDetails.getHourOfDay() || minute != previousTripDetails.getMinute())  {
-                        Model.getInstance().editTrip(new Trip(name, id, type, 0, 0, difficulty), index);//, isChecked, year, monthOfYear, dayOfMonth, hourOfDay, minute), index);
+                        Model.getInstance().editTrip(new Trip(name, id, type, 0, difficulty, null), index);//, isChecked, year, monthOfYear, dayOfMonth, hourOfDay, minute), index);
                         Intent intent = new Intent();
                         intent.putExtra("tripIndex", index);
 

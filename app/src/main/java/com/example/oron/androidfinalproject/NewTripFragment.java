@@ -103,7 +103,7 @@ public class NewTripFragment extends Fragment {
                 if (name != null && !name.isEmpty() && id != null && !id.isEmpty() && type != null && !type.isEmpty() && difficulty != 0) {
 //                    Model.getInstance().addTrip(new Trip(name, id, phone, address, isChecked, year, monthOfYear, dayOfMonth, hourOfDay, minute));
 
-                    final Trip trip = new Trip(name, id, type, 0, 0, difficulty);
+                    final Trip trip = new Trip(name, id, type, 0, difficulty, null);
                     if(imageBitmap != null){
                         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
                         String imName = "image_" + id + "_" + timeStamp + ".jpg";
@@ -123,7 +123,7 @@ public class NewTripFragment extends Fragment {
                         saveTripAndClose(trip);
                     }
 
-                    Model.getInstance().addTrip(new Trip(name, id, type, 0, 0, difficulty));
+                    Model.getInstance().addTrip(new Trip(name, id, type, 0, difficulty, null));
 
 //                    Model.getInstance().add(new Trip(name, id, type, 0, 0, difficulty));
 
