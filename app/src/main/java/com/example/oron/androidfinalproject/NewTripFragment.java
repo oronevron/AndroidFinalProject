@@ -123,7 +123,7 @@ public class NewTripFragment extends Fragment {
                         saveTripAndClose(trip);
                     }
 
-                    Model.getInstance().addTrip(new Trip(name, id, type, 0, difficulty, null));
+//                    Model.getInstance().addTrip(new Trip(name, id, type, 0, difficulty, null));
 
 //                    Model.getInstance().add(new Trip(name, id, type, 0, 0, difficulty));
 
@@ -160,12 +160,12 @@ public class NewTripFragment extends Fragment {
 
     private void saveTripAndClose(Trip trip){
         if (trip != null){
-            Model.getInstance().add(trip);
+            Model.getInstance().addTrip(trip);
         }
 
-        Intent resultIntent = new Intent();
-        getActivity().setResult(Activity.RESULT_OK, resultIntent);
-        getActivity().finish();
+//        Intent resultIntent = new Intent();
+//        getActivity().setResult(Activity.RESULT_OK, resultIntent);
+//        getActivity().finish();
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
