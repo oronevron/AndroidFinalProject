@@ -14,10 +14,13 @@ import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.example.oron.androidfinalproject.Model.Model;
+import com.example.oron.androidfinalproject.Model.Trip;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,20 +79,24 @@ public class MainActivity extends AppCompatActivity {
         // New trip has been created
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
+                List<Trip> trips = Model.getInstance().refreshTripsList();
+                tripsListFragment.setTripsList(trips);
                 tripsListFragment.getAdapter().notifyDataSetChanged();
-                tripsListFragment.getList().setSelection(Model.getInstance().getAllTrips().size());
+                tripsListFragment.getList().setSelection(trips.size());
             }
         }
 
         // Trip has been deleted
         else if (requestCode == 2) {
             if (resultCode == Activity.RESULT_FIRST_USER) {
+                tripsListFragment.setTripsList(Model.getInstance().refreshTripsList());
                 tripsListFragment.getAdapter().notifyDataSetChanged();
                 tripsListFragment.getList().setSelection(0);
             }
 
             // Trip has been edited
             else if (resultCode == Activity.RESULT_OK) {
+                tripsListFragment.setTripsList(Model.getInstance().refreshTripsList());
                 tripsListFragment.getAdapter().notifyDataSetChanged();
                 tripsListFragment.getList().setSelection((int)data.getExtras().get("tripIndex"));
             }
