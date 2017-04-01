@@ -33,6 +33,10 @@ public class TripsListFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public void setTripsList(List<Trip> trips) {
+        tripsList = trips;
+    }
+
     public ListView getList() {
         return list;
     }
@@ -73,7 +77,9 @@ public class TripsListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity().getApplicationContext(), TripDetailsActivity.class);
-                intent.putExtra("tripIndex", i);
+//                intent.putExtra("tripIndex", i);
+                String test  =((Trip)adapterView.getItemAtPosition(i)).getId();
+                intent.putExtra("tripIndex", (((Trip)adapterView.getItemAtPosition(i)).getId()));
                 getActivity().startActivityForResult(intent, 2);
             }
         });
