@@ -74,15 +74,15 @@ public class Model {
             public void onResult(List<Trip> trips) {
                 if(trips != null && trips.size() > 0) {
                     //3. update the local DB
-                    double reacentUpdate = lastUpdateDate;
+                    double recentUpdate = lastUpdateDate;
                     for (Trip trip : trips) {
                         TripSql.add(modelSql.getWritableDB(), trip);
-                        if (trip.getLastUpdated() > reacentUpdate) {
-                            reacentUpdate = trip.getLastUpdated();
+                        if (trip.getLastUpdated() > recentUpdate) {
+                            recentUpdate = trip.getLastUpdated();
                         }
                         Log.d("TAG","updating: " + trip.toString());
                     }
-                    TripSql.setLastUpdateDate(modelSql.getWritableDB(), reacentUpdate);
+                    TripSql.setLastUpdateDate(modelSql.getWritableDB(), recentUpdate);
 
 
 //                        tripsData.add(s);

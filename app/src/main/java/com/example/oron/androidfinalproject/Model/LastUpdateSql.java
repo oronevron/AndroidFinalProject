@@ -7,10 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Or Natan on 29/03/2017.
- */
-
 public class LastUpdateSql {
     final static String LAST_UPDATE_TABLE = "last_update";
     final static String LAST_UPDATE_TABLE_TNAME = "table_name";
