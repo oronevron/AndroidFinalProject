@@ -161,7 +161,7 @@ public class NewTripFragment extends Fragment {
 //                    Model.getInstance().addTrip(new Trip(name, id, phone, address, isChecked, year, monthOfYear, dayOfMonth, hourOfDay, minute));
 
                     final Trip trip = new Trip(name, id, type, 0, difficulty, null);
-                    if(imageBitmap != null){
+                    if (imageBitmap != null){
                         String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
                         String imName = "image_" + id + "_" + timeStamp + ".jpg";
                         Model.getInstance().saveImage(imageBitmap, imName, new Model.SaveImageListener() {
@@ -176,7 +176,7 @@ public class NewTripFragment extends Fragment {
                                 saveTripAndClose(null);
                             }
                         });
-                    }else{
+                    } else {
                         saveTripAndClose(trip);
                     }
 
