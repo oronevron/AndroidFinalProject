@@ -97,7 +97,7 @@ public class Trip {
         HashMap<String, Object> result = new HashMap<>();
 //        result.put("id", id);
         result.put("name", name);
-//        result.put("imageName", imageName);
+        result.put("imageName", imageName);
         result.put("type", type);
         result.put("difficulty", difficulty);
 //        result.put("checked", checked);
