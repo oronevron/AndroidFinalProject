@@ -1,6 +1,7 @@
 package com.example.oron.androidfinalproject;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.oron.androidfinalproject.Model.Model;
@@ -49,12 +52,17 @@ public class TripsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        View view = inflater.inflate(R.layout.fragment_trips_list, container, false);
+
+        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.tripsListProgressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
         // Get all trips
 //        tripsList = Model.getInstance().getAllTrips();
         Model.getInstance().getAllTripsAsynch(new Model.GetTripsListener() {
             @Override
             public void onResult(List<Trip> trips) {
-//                progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 tripsList = trips;
                 adapter.notifyDataSetChanged();
             }
@@ -64,8 +72,6 @@ public class TripsListFragment extends Fragment {
 
             }
         });
-
-        View view = inflater.inflate(R.layout.fragment_trips_list, container, false);
 
         // Connect the adapter to the list in order to show the data
         list = (ListView) view.findViewById(R.id.tripsListListView);
@@ -78,7 +84,6 @@ public class TripsListFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getActivity().getApplicationContext(), TripDetailsActivity.class);
 //                intent.putExtra("tripIndex", i);
-                String test  =((Trip)adapterView.getItemAtPosition(i)).getId();
                 intent.putExtra("tripIndex", (((Trip)adapterView.getItemAtPosition(i)).getId()));
                 getActivity().startActivityForResult(intent, 2);
             }
@@ -123,10 +128,36 @@ public class TripsListFragment extends Fragment {
             }
 
             Trip trip = tripsList.get(i);
+            final ImageView image = (ImageView) view.findViewById(R.id.tripRowImageView);
             TextView idTv = (TextView) view.findViewById(R.id.tripRowId);
             idTv.setText(trip.getId());
             TextView nameTv = (TextView) view.findViewById(R.id.tripRowName);
             nameTv.setText(trip.getName());
+
+            if (trip.getImageName() != null) {
+                final ProgressBar progress = (ProgressBar) view.findViewById(R.id.tripRowImageProgressBar);
+                progress.setVisibility(View.VISIBLE);
+                Model.getInstance().loadImage(trip.getImageName(), new Model.GetImageListener() {
+                    @Override
+                    public void onSuccess(Bitmap imagebtmp) {
+//                if (imagebtmp != null && ((Integer)cb.getTag() == position)) {
+                        if (imagebtmp != null) {
+                            image.setImageBitmap(imagebtmp);
+                            progress.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onFail() {
+                        progress.setVisibility(View.GONE);
+                    }
+                });
+            } else {
+                image.setImageResource(R.drawable.trip);
+            }
+
+
+
 //            CheckBox checkedCb = (CheckBox) view.findViewById(R.id.tripRowCheckBox);
 //            checkedCb.setChecked(trip.getChecked());
 //            checkedCb.setTag(new Integer(i));
