@@ -60,7 +60,7 @@ public class EditTripFragment extends Fragment {
 
 
         // Save the initial trip details in temporary variable
-        previousTripDetails = new Trip(nameEt.getText().toString(), idEt.getText().toString(),typeEt.getText().toString(), 0, Integer.parseInt(difficultyEt.getText().toString()), null);//, checkedCb.isChecked(), trip.getYear(), trip.getMonthOfYear(), trip.getDayOfMonth(), trip.getHourOfDay(), trip.getMinute());
+        previousTripDetails = new Trip(nameEt.getText().toString(), typeEt.getText().toString(), 0, Integer.parseInt(difficultyEt.getText().toString()));//, checkedCb.isChecked(), trip.getYear(), trip.getMonthOfYear(), trip.getDayOfMonth(), trip.getHourOfDay(), trip.getMinute());
 
         // Handle click on cancel button
         Button cancelBtn = (Button) view.findViewById(R.id.edit_trip_cancel_button);
@@ -157,7 +157,7 @@ public class EditTripFragment extends Fragment {
 //                        Model.getInstance().editTrip(new Trip(name, id, type, 0, difficulty, null), index);//, isChecked, year, monthOfYear, dayOfMonth, hourOfDay, minute), index);
 
 
-                        Model.getInstance().editTrip(new Trip(name, id, type, 0, difficulty, null), new Model.EditTripListener() {
+                        Model.getInstance().editTrip(new Trip(name, type, 0, difficulty), new Model.EditTripListener() {
                             @Override
                             public void onResult() {
                                 Intent intent = new Intent();

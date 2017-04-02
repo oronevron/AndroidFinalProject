@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -28,7 +29,6 @@ import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,7 +45,6 @@ public class NewTripFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,8 +52,14 @@ public class NewTripFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_new_trip, container, false);
         imageView = (ImageView) view.findViewById(R.id.new_trip_imageview);
 
-        // Populate spinner values
+        // Populate values in the types spinner
         Spinner spinner = (Spinner) view.findViewById(R.id.types_spinner);
+
+        // Set minimum and maximum values for the minimal age number picker
+        NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.new_trip_minimal_age);
+
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(70);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -132,57 +137,20 @@ public class NewTripFragment extends Fragment {
                 String name;
                 String id;
                 String type;
-//                int difficulty;
-                Boolean isChecked;
-                int year;
-                int monthOfYear;
-                int dayOfMonth;
-                int hourOfDay;
-                int minute;
+                int minimalAge;
 
                 EditText nameEt = (EditText) view.findViewById(R.id.new_trip_name);
                 name = nameEt.getText().toString();
-                EditText idEt = (EditText) view.findViewById(R.id.new_trip_id);
-                id = idEt.getText().toString();
                 Spinner spinner = (Spinner) view.findViewById(R.id.types_spinner);
                 type = spinner.getSelectedItem().toString();
-//                CheckBox checkedCb = (CheckBox) view.findViewById(R.id.new_trip_checked);
-//                isChecked = checkedCb.isChecked();
-//                InputDateTextView birthDateIdtv = (InputDateTextView) view.findViewById(R.id.new_trip_birth_date);
-//                year = birthDateIdtv.getYear();
-//                monthOfYear = birthDateIdtv.getMonthOfYear();
-//                dayOfMonth = birthDateIdtv.getDayOfMonth();
-//                InputTimeTextView birthTimeIdtv = (InputTimeTextView) view.findViewById(R.id.new_trip_birth_time);
-//                hourOfDay = birthTimeIdtv.getHourOfDay();
-//                minute = birthTimeIdtv.getMinute();
+                NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.new_trip_minimal_age);
+                minimalAge = numberPicker.getValue();
 
                 // Check that there is no empty field
-                if (name != null && !name.isEmpty() && id != null && !id.isEmpty() && type != null && !type.isEmpty()) {
-//                    Model.getInstance().addTrip(new Trip(name, id, phone, address, isChecked, year, monthOfYear, dayOfMonth, hourOfDay, minute));
+                if (name != null && !name.isEmpty() && type != null && !type.isEmpty()) {
 
-                    final Trip trip = new Trip(name, id, type, 0, difficulty, null);
-                    if(imageBitmap != null){
-                        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-                        String imName = "image_" + id + "_" + timeStamp + ".jpg";
-                        Model.getInstance().saveImage(imageBitmap, imName, new Model.SaveImageListener() {
-                            @Override
-                            public void complete(String url) {
-                                trip.setImageName(url);
-                                saveTripAndClose(trip);
-                            }
-
-                            @Override
-                            public void fail() {
-                                saveTripAndClose(null);
-                            }
-                        });
-                    }else{
-                        saveTripAndClose(trip);
-                    }
-
-//                    Model.getInstance().addTrip(new Trip(name, id, type, 0, difficulty, null));
-
-//                    Model.getInstance().add(new Trip(name, id, type, 0, 0, difficulty));
+                    final Trip trip = new Trip(name, type, minimalAge, difficulty);
+                    saveTripAndClose(trip);
 
                     DialogFragment dialog = new MessagesAlertDialog();
                     Bundle args = new Bundle();
@@ -217,12 +185,8 @@ public class NewTripFragment extends Fragment {
 
     private void saveTripAndClose(Trip trip){
         if (trip != null){
-            Model.getInstance().addTrip(trip);
+            Model.getInstance().addTrip(trip, imageBitmap);
         }
-
-//        Intent resultIntent = new Intent();
-//        getActivity().setResult(Activity.RESULT_OK, resultIntent);
-//        getActivity().finish();
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;

@@ -53,6 +53,7 @@
     <string name="new_trip_activity_label">Add new Trip</string>
     <string name="new_trip_save_button">Save</string>
     <string name="new_trip_cancel_button">Cancel</string>
+    <string name="new_trip_minimal_age">Minimal Age:</string>
 
     <!--Edit Trip Activity-->
     <string name="edit_trip_activity_label">Edit Trip</string>

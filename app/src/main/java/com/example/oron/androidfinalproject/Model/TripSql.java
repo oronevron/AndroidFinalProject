@@ -48,7 +48,9 @@ public class TripSql {
                 Integer age_min = cursor.getInt(ageMinIndex);
                 Integer difficulty = cursor.getInt(difficultyIndex);
                 String imageName = cursor.getString(imageNameIndex);
-                Trip trip = new Trip(name, id, type, age_min, difficulty, imageName);
+                Trip trip = new Trip(name, type, age_min, difficulty);
+                trip.setId(id);
+                trip.setImageName(imageName);
                 trips.add(trip);
             } while (cursor.moveToNext());
         }
@@ -73,7 +75,9 @@ public class TripSql {
             Integer age_min = cursor.getInt(ageMinIndex);
             Integer difficulty = cursor.getInt(difficultyIndex);
             String imageName = cursor.getString(imageNameIndex);
-            Trip trip = new Trip(name, trip_id, type, age_min, difficulty, imageName);
+            Trip trip = new Trip(name, type, age_min, difficulty);
+            trip.setId(trip_id);
+            trip.setImageName(imageName);
             return trip;
         }
         return null;

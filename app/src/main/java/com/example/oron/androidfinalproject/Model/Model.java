@@ -121,10 +121,9 @@ public class Model {
         return TripSql.getTripById(modelSql.getReadbleDB(), id);
     }
 
-    public void addTrip(Trip trip){
-        String key = modelFirebase.addTrip(trip);
-        trip.setId(key);
-        TripSql.addTrip(modelSql.getWritableDB(), trip);
+    public void addTrip(Trip trip, Bitmap imageBitmap){
+        // Add trip to both firebase and local sql db
+        modelFirebase.addTrip(trip, imageBitmap);
     }
 
     public interface DeleteTripListener{

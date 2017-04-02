@@ -19,6 +19,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -67,11 +69,30 @@ public class ModelFirebase {
 //        });
 //    }
 
-    public String addTrip(Trip trip) {
-        DatabaseReference myRef = database.getReference("trips");
-        String key = myRef.push().getKey();
-        myRef.child(key).setValue(trip.toMap());
-        return key;
+    public void addTrip(final Trip trip, Bitmap imageBitmap) {
+        final DatabaseReference myRef = database.getReference("trips");
+        final String key = myRef.push().getKey();
+
+        trip.setId(key);
+
+        // Set the image name
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String imName = "image_" + key + "_" + timeStamp + ".jpg";
+
+        // Add image to firebase and local storage
+        Model.getInstance().saveImage(imageBitmap, imName, new Model.SaveImageListener() {
+            @Override
+            public void complete(String url) {
+                trip.setImageName(url);
+                myRef.child(key).setValue(trip.toMap());
+                TripSql.addTrip(Model.getInstance().modelSql.getWritableDB(), trip);
+            }
+
+            @Override
+            public void fail() {
+
+            }
+        });
     }
 
     public void deleteTrip(final String id, final Model.DeleteTripListener listener) {

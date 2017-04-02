@@ -10,5 +10,5 @@
     <dimen name="trips_list_row_left_margin">5dp</dimen>
     <dimen name="trips_list_button_margin">20dp</dimen>
     <dimen name="trips_details_margin">5dp</dimen>
-    <dimen name="new_trip_margin">5dp</dimen>
+    <dimen name="new_trip_margin">10dp</dimen>
 </resources>
