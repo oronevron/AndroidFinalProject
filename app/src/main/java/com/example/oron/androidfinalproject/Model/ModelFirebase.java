@@ -19,8 +19,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -69,39 +67,22 @@ public class ModelFirebase {
 //        });
 //    }
 
-    public void addTrip(final Trip trip, Bitmap imageBitmap) {
+    public void addTrip(Trip trip, Bitmap imageBitmap, final Model.AddTripListener listener) {
         final DatabaseReference myRef = database.getReference("trips");
         final String key = myRef.push().getKey();
 
         trip.setId(key);
 
-        // Check if we need to save image or not and act accordingly
-        if(imageBitmap != null)
-        {
-            // Set the image name
-            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-            String imName = "image_" + key + "_" + timeStamp + ".jpg";
-
-            // Add image to firebase and local storage
-            Model.getInstance().saveImage(imageBitmap, imName, new Model.SaveImageListener() {
-                @Override
-                public void complete(String url) {
-                    trip.setImageName(url);
-                    myRef.child(key).setValue(trip.toMap());
-                    TripSql.addTrip(Model.getInstance().modelSql.getWritableDB(), trip);
+        myRef.child(key).setValue(trip.toMap(), new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    listener.onResult();
+                } else {
+                    listener.onCancel();
                 }
-
-                @Override
-                public void fail() {
-
-                }
-            });
-        }
-        else
-        {
-            myRef.child(key).setValue(trip.toMap());
-            TripSql.addTrip(Model.getInstance().modelSql.getWritableDB(), trip);
-        }
+            }
+        });
     }
 
     public void deleteTrip(final String id, final Model.DeleteTripListener listener) {
@@ -181,28 +162,31 @@ public class ModelFirebase {
     public void handleDatabaseChanges() {
         database.getReference("trips").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                System.out.println("bla");
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                System.out.println("onChildAdded: " + previousChildName);
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                System.out.println("bla");
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                System.out.println("onChildChanged: " + previousChildName);
+//                Trip test = TripSql.getTripById(Model.getInstance().modelSql.getReadbleDB(), dataSnapshot.getKey());
+//                TripSql.editTrip(Model.getInstance().modelSql.getWritableDB(), dataSnapshot.getValue(Trip.class));
+//                Trip test2 = TripSql.getTripById(Model.getInstance().modelSql.getReadbleDB(), dataSnapshot.getKey());
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                System.out.println("bla");
+                System.out.println("onChildRemoved: " + dataSnapshot.getKey());
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                System.out.println("bla");
+                System.out.println("onChildMoved");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("bla");
+                System.out.println("onCancelled");
             }
         });
     }

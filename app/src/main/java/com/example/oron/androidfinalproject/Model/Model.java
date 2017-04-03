@@ -17,7 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,9 +61,9 @@ public class Model {
 //        tripsData.set(index, trip);
 //    }
 
-    public Trip getTripByIndex(int index) {
-        return tripsData.get(index);
-    }
+//    public Trip getTripByIndex(int index) {
+//        return tripsData.get(index);
+//    }
 
     public interface GetTripsListener{
         public void onResult(List<Trip> trips);
@@ -121,9 +122,50 @@ public class Model {
         return TripSql.getTripById(modelSql.getReadbleDB(), id);
     }
 
-    public void addTrip(Trip trip, Bitmap imageBitmap){
+    public interface AddTripListener{
+        public void onResult();
+        public void onCancel();
+    }
+
+    public void addTrip(final Trip trip, final Bitmap imageBitmap, final AddTripListener listener){
+        // Check if we need to save image or not and act accordingly
+        if (imageBitmap != null) {
+            // Set the image name
+            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            String imName = "image_" + trip.getId() + "_" + timeStamp + ".jpg";
+
+            // Add image to firebase and local storage
+            saveImage(imageBitmap, imName, new Model.SaveImageListener() {
+                @Override
+                public void complete(String url) {
+                    trip.setImageName(url);
+                    saveTrip(trip, imageBitmap, listener);
+                }
+
+                @Override
+                public void fail() {
+                    saveTrip(trip, imageBitmap, listener);
+                }
+            });
+        } else {
+            saveTrip(trip, imageBitmap, listener);
+        }
+    }
+
+    private void saveTrip(final Trip trip, final Bitmap imageBitmap, final AddTripListener listener) {
         // Add trip to both firebase and local sql db
-        modelFirebase.addTrip(trip, imageBitmap);
+        modelFirebase.addTrip(trip, imageBitmap, new AddTripListener() {
+            @Override
+            public void onResult() {
+                TripSql.addTrip(Model.getInstance().modelSql.getWritableDB(), trip);
+                listener.onResult();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 
     public interface DeleteTripListener{

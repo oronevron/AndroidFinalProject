@@ -150,16 +150,25 @@ public class NewTripFragment extends Fragment {
                 if (name != null && !name.isEmpty() && type != null && !type.isEmpty()) {
 
                     final Trip trip = new Trip(name, type, minimalAge, difficulty);
-                    saveTripAndClose(trip);
+//                    saveTripAndClose(trip);
+                    Model.getInstance().addTrip(trip, imageBitmap, new Model.AddTripListener() {
+                        @Override
+                        public void onResult() {
+                            DialogFragment dialog = new MessagesAlertDialog();
+                            Bundle args = new Bundle();
+                            args.putInt("resultCode", Activity.RESULT_OK);
+                            args.putInt("messageCode", R.string.new_trip_success_message);
+                            args.putBoolean("isMessageOnly", false);
+                            args.putBoolean("isTripIndexSent", false);
+                            dialog.setArguments(args);
+                            dialog.show(getFragmentManager(), "TAG");
+                        }
 
-                    DialogFragment dialog = new MessagesAlertDialog();
-                    Bundle args = new Bundle();
-                    args.putInt("resultCode", Activity.RESULT_OK);
-                    args.putInt("messageCode", R.string.new_trip_success_message);
-                    args.putBoolean("isMessageOnly", false);
-                    args.putBoolean("isTripIndexSent", false);
-                    dialog.setArguments(args);
-                    dialog.show(getFragmentManager(), "TAG");
+                        @Override
+                        public void onCancel() {
+
+                        }
+                    });
                 }
                 else {
                     DialogFragment dialog = new MessagesAlertDialog();
@@ -183,11 +192,11 @@ public class NewTripFragment extends Fragment {
         return view;
     }
 
-    private void saveTripAndClose(Trip trip){
-        if (trip != null){
-            Model.getInstance().addTrip(trip, imageBitmap);
-        }
-    }
+//    private void saveTripAndClose(Trip trip){
+//        if (trip != null){
+//            Model.getInstance().addTrip(trip, imageBitmap);
+//        }
+//    }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
