@@ -163,7 +163,7 @@ public class ModelFirebase {
         database.getReference("trips").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                System.out.println("onChildAdded: " + previousChildName);
+                System.out.println("onChildAdded: " + dataSnapshot.getKey());
             }
 
             @Override

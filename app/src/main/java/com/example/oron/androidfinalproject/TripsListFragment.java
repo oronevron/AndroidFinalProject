@@ -118,6 +118,7 @@ public class TripsListFragment extends Fragment {
 
             Trip trip = tripsList.get(i);
             final ImageView image = (ImageView) view.findViewById(R.id.tripRowImageView);
+            image.setVisibility(View.GONE);
             TextView nameTv = (TextView) view.findViewById(R.id.tripRowName);
             nameTv.setText(trip.getName());
 
@@ -129,17 +130,20 @@ public class TripsListFragment extends Fragment {
                     public void onSuccess(Bitmap imagebtmp) {
                         if (imagebtmp != null) {
                             image.setImageBitmap(imagebtmp);
+                            image.setVisibility(View.VISIBLE);
                             progress.setVisibility(View.GONE);
                         }
                     }
 
                     @Override
                     public void onFail() {
+                        image.setVisibility(View.VISIBLE);
                         progress.setVisibility(View.GONE);
                     }
                 });
             } else {
                 image.setImageResource(R.drawable.trip);
+                image.setVisibility(View.VISIBLE);
             }
 
             return view;
