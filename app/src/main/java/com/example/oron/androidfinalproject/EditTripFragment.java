@@ -165,14 +165,18 @@ public class EditTripFragment extends Fragment {
                 int minimalAge = numberPicker.getValue();
 
                 // Check that there is no empty field
-                if (name != null && !name.isEmpty() && type != null && !type.isEmpty()) {
+                if (name != null && !name.isEmpty()) {
 
                     // Check if there is at least one change in trip details
-                    if (!name.equals(previousTripDetails.getName()) || !type.equals(previousTripDetails.getType()) || difficulty != previousTripDetails.getDifficulty()) {// || !isChecked.equals(previousTripDetails.getChecked()) ||
+                    if (!name.equals(previousTripDetails.getName()) ||
+                            !type.equals(previousTripDetails.getType()) ||
+                            difficulty != previousTripDetails.getDifficulty() ||
+                            minimalAge != previousTripDetails.getAge_min()) {// || !isChecked.equals(previousTripDetails.getChecked()) ||
 //                    year != previousTripDetails.getYear() || monthOfYear != previousTripDetails.getMonthOfYear() || dayOfMonth != previousTripDetails.getDayOfMonth() || hourOfDay != previousTripDetails.getHourOfDay() || minute != previousTripDetails.getMinute())  {
 
                         Trip tripToEdit = new Trip(name,type,minimalAge,difficulty);
                         tripToEdit.setId(trip.getId());
+                        tripToEdit.setImageName(trip.getImageName());
 
                         Model.getInstance().editTrip(tripToEdit, new Model.EditTripListener() {
                             @Override
