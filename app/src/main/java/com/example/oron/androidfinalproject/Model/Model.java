@@ -225,7 +225,7 @@ public class Model {
     }
 
     public interface GetImageListener{
-        void onSccess(Bitmap image);
+        void onSuccess(Bitmap image);
         void onFail();
     }
 
@@ -238,13 +238,13 @@ public class Model {
 
             modelFirebase.getImage(url, new GetImageListener() {
                 @Override
-                public void onSccess(Bitmap image) {
+                public void onSuccess(Bitmap image) {
                     //2.  save the image localy
 //                    String localFileName = getLocalImageFileName(url);
                     Log.d("TAG","save image to cache: " + localFileName);
                     saveImageToFile(image, localFileName);
                     //3. return the image using the listener
-                    listener.onSccess(image);
+                    listener.onSuccess(image);
                 }
 
                 @Override
@@ -254,7 +254,7 @@ public class Model {
             });
         } else {
             Log.d("TAG","OK reading cache image: " + localFileName);
-            listener.onSccess(image);
+            listener.onSuccess(image);
         }
     }
 

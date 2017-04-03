@@ -155,7 +155,7 @@ public class ModelFirebase {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                listener.onSccess(image);
+                listener.onSuccess(image);
                 // Data for "images/island.jpg" is returns, use this as needed
             }
         }).addOnFailureListener(new OnFailureListener() {

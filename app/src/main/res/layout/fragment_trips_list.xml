@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     tools:context="com.example.oron.androidfinalproject.TripsListFragment">
 
+    <ProgressBar
+        android:id="@+id/tripsListProgressBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+        android:indeterminate="true" />
+
     <ListView
         android:id="@+id/tripsListListView"
         android:layout_width="match_parent"

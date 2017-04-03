@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.example.oron.androidfinalproject.Model.Model;
 import com.example.oron.androidfinalproject.Model.Trip;
@@ -51,6 +54,29 @@ public class EditTripFragment extends Fragment {
         typeEt.setText(trip.getType());
         EditText difficultyEt = (EditText) view.findViewById(R.id.edit_trip_difficulty);
         difficultyEt.setText(Integer.toString(trip.getDifficulty()));
+
+        if (trip.getImageName() != null) {
+            final ImageView image = (ImageView) view.findViewById(R.id.edit_trip_image_view);
+            final ProgressBar progress = (ProgressBar) view.findViewById(R.id.edit_trip_image_progress_bar);
+            progress.setVisibility(View.VISIBLE);
+            Model.getInstance().loadImage(trip.getImageName(), new Model.GetImageListener() {
+                @Override
+                public void onSuccess(Bitmap imagebtmp) {
+//                if (imagebtmp != null && ((Integer)cb.getTag() == position)) {
+                    if (imagebtmp != null) {
+                        image.setImageBitmap(imagebtmp);
+                        progress.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onFail() {
+                    progress.setVisibility(View.GONE);
+                }
+            });
+        }
+
+
 //        CheckBox checkedCb = (CheckBox) view.findViewById(R.id.edit_trip_checked);
 //        checkedCb.setChecked(trip.getChecked());
 //        InputDateTextView birthDateIdtv = (InputDateTextView) view.findViewById(R.id.edit_trip_birth_date);
@@ -131,11 +157,12 @@ public class EditTripFragment extends Fragment {
                 EditText typeEt = (EditText) view.findViewById(R.id.edit_trip_type);
                 type = typeEt.getText().toString();
                 EditText difficultyEt = (EditText) view.findViewById(R.id.edit_trip_difficulty);
-                try {
-                    difficulty = Integer.parseInt(difficultyEt.getText().toString());
-                } catch (NumberFormatException e) {
-                    difficulty = 0;
-                }
+                difficulty = Integer.parseInt(difficultyEt.getText().toString());
+//                try {
+//                    difficulty = Integer.parseInt(difficultyEt.getText().toString());
+//                } catch (NumberFormatException e) {
+//                    difficulty = 0;
+//                }
 //                CheckBox checkedCb = (CheckBox) view.findViewById(R.id.edit_trip_checked);
 //                isChecked = checkedCb.isChecked();
 //                InputDateTextView birthDateIdtv = (InputDateTextView) view.findViewById(R.id.edit_trip_birth_date);
@@ -147,7 +174,7 @@ public class EditTripFragment extends Fragment {
 //                minute = birthTimeIdtv.getMinute();
 
                 // Check that there is no empty field
-                if (name != null && !name.isEmpty() && id != null && !id.isEmpty() && type != null && !type.isEmpty() && difficulty != 0) {
+                if (name != null && !name.isEmpty() && id != null && !id.isEmpty() && type != null && !type.isEmpty()) {
 
                     // Check if there is at least one change in trip details
                     if (!name.equals(previousTripDetails.getName()) || !id.equals(previousTripDetails.getId()) || !type.equals(previousTripDetails.getType()) || difficulty != previousTripDetails.getDifficulty()) {// || !isChecked.equals(previousTripDetails.getChecked()) ||
