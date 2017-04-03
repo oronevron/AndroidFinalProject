@@ -40,9 +40,10 @@
             android:name=".SignupActivity"
             android:label="Sign In"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ResetPasswordActivity"
-                  android:label="Reset Password"
-                  android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:label="Reset Password"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".TripDetailsActivity"
             android:label="@string/trip_details_activity_label" />
@@ -50,8 +51,10 @@
             android:name=".NewTripActivity"
             android:label="@string/new_trip_activity_label"
             android:theme="@style/AppTheme.NoYellow"/>
-        <activity android:name=".EditTripActivity"
-            android:label="@string/edit_trip_activity_label"></activity>
+        <activity
+            android:name=".EditTripActivity"
+            android:label="@string/edit_trip_activity_label"
+            android:theme="@style/AppTheme.NoYellow"></activity>
     </application>
 
 </manifest>

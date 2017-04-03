@@ -4,11 +4,11 @@
     <string name="app_name">Traveller</string>
 
     <string-array name="types_array">
+        <item>Nature</item>
         <item>Camping</item>
-        <item>Arts and Culture</item>
         <item>Bicycle</item>
-        <item>Snow</item>
-        <item>Road</item>
+        <item>Arts and Culture</item>
+        <item>Water</item>
     </string-array>
 
     <string name="action_sign_in_short">Register</string>

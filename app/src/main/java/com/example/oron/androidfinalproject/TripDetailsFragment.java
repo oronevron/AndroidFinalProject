@@ -32,27 +32,31 @@ public class TripDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_trip_details, container, false);
-
-//        int index = this.getArguments().getInt("tripIndex");
-//        Trip trip = Model.getInstance().getTripByIndex(index);
-
-
-
-
         String index = this.getArguments().getString("tripIndex");
         Trip trip = Model.getInstance().getTripById(index);
 
-
-
-
         TextView nameTv = (TextView) view.findViewById(R.id.trip_details_name);
-        nameTv.setText("name: " + trip.getName());
-        TextView idTv = (TextView) view.findViewById(R.id.trip_details_id);
-        idTv.setText("id: " + trip.getId());
+        nameTv.setText("Name: " + trip.getName());
         TextView typeTv = (TextView) view.findViewById(R.id.trip_details_type);
-        typeTv.setText("type: " + trip.getType());
+        typeTv.setText("Type: " + trip.getType());
         TextView difficultyTv = (TextView) view.findViewById(R.id.trip_details_difficulty);
-        difficultyTv.setText("difficulty: " + trip.getDifficulty());
+        int difficulty = trip.getDifficulty();
+        String diffDesc = null;
+        switch (difficulty) {
+            case 0: diffDesc = getResources().getString(R.string.very_easy);
+                    break;
+            case 1: diffDesc = getResources().getString(R.string.easy);
+                    break;
+            case 2: diffDesc = getResources().getString(R.string.medium);
+                    break;
+            case 3: diffDesc = getResources().getString(R.string.hard);
+                    break;
+            case 4: diffDesc = getResources().getString(R.string.very_hard);
+                    break;
+        }
+        difficultyTv.setText("Difficulty: " + diffDesc);
+        TextView minimalAgeTv = (TextView) view.findViewById(R.id.trip_details_minimal_age);
+        minimalAgeTv.setText("Minimal Age: " + trip.getAge_min());
 
         if (trip.getImageName() != null) {
             final ImageView image = (ImageView) view.findViewById(R.id.trip_details_imageview);
@@ -61,7 +65,6 @@ public class TripDetailsFragment extends Fragment {
             Model.getInstance().loadImage(trip.getImageName(), new Model.GetImageListener() {
                 @Override
                 public void onSuccess(Bitmap imagebtmp) {
-//                if (imagebtmp != null && ((Integer)cb.getTag() == position)) {
                     if (imagebtmp != null) {
                         image.setImageBitmap(imagebtmp);
                         progress.setVisibility(View.GONE);
@@ -75,16 +78,7 @@ public class TripDetailsFragment extends Fragment {
             });
         }
 
-
-//        CheckBox checkedCb = (CheckBox) view.findViewById(R.id.trip_details_checked);
-//        checkedCb.setChecked(trip.getChecked());
-//        TextView birthDateTv = (TextView) view.findViewById(R.id.trip_details_birth_date);
-//        birthDateTv.setText("birth date: " + trip.getDayOfMonth() + "/" + trip.getMonthOfYear() + "/" + trip.getYear());
-//        TextView birthTimeTv = (TextView) view.findViewById(R.id.trip_details_birth_time);
-//        birthTimeTv.setText("birth time: " + trip.getHourOfDay() + ":" + trip.getMinute());
-
         // Inflate the layout for this fragment
         return view;
     }
-
 }

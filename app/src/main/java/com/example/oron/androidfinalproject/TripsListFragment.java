@@ -114,23 +114,10 @@ public class TripsListFragment extends Fragment {
         public View getView(final int i, View view, ViewGroup viewGroup) {
             if (view == null){
                 view = getActivity().getLayoutInflater().inflate(R.layout.fragment_trip_list_row, null);
-
-                // Handle click on the checkbox
-//                final CheckBox checkedCb = (CheckBox) view.findViewById(R.id.tripRowCheckBox);
-//                checkedCb.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        Integer index = (Integer)checkedCb.getTag();
-//                        Trip trip = tripsList.get(index);
-//                        trip.setChecked(!trip.getChecked());
-//                    }
-//                });
             }
 
             Trip trip = tripsList.get(i);
             final ImageView image = (ImageView) view.findViewById(R.id.tripRowImageView);
-            TextView idTv = (TextView) view.findViewById(R.id.tripRowId);
-            idTv.setText(trip.getId());
             TextView nameTv = (TextView) view.findViewById(R.id.tripRowName);
             nameTv.setText(trip.getName());
 
@@ -140,7 +127,6 @@ public class TripsListFragment extends Fragment {
                 Model.getInstance().loadImage(trip.getImageName(), new Model.GetImageListener() {
                     @Override
                     public void onSuccess(Bitmap imagebtmp) {
-//                if (imagebtmp != null && ((Integer)cb.getTag() == position)) {
                         if (imagebtmp != null) {
                             image.setImageBitmap(imagebtmp);
                             progress.setVisibility(View.GONE);
@@ -155,12 +141,6 @@ public class TripsListFragment extends Fragment {
             } else {
                 image.setImageResource(R.drawable.trip);
             }
-
-
-
-//            CheckBox checkedCb = (CheckBox) view.findViewById(R.id.tripRowCheckBox);
-//            checkedCb.setChecked(trip.getChecked());
-//            checkedCb.setTag(new Integer(i));
 
             return view;
         }

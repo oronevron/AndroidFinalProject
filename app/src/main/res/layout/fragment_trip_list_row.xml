@@ -41,14 +41,6 @@
                 android:layout_marginTop="@dimen/trips_list_row_top_margin"
                 android:layout_marginLeft="@dimen/trips_list_row_left_margin" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-                android:id="@+id/tripRowId"
-                android:layout_marginTop="@dimen/trips_list_row_top_margin"
-                android:layout_marginLeft="@dimen/trips_list_row_left_margin" />
-
         </LinearLayout>
 
     </LinearLayout>

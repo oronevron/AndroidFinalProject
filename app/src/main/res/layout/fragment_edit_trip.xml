@@ -58,33 +58,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/id"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
-                android:layout_margin="@dimen/trips_details_margin"/>
-
-            <EditText
-                android:id="@+id/edit_trip_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/type"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_margin="@dimen/trips_details_margin"/>
 
-            <EditText
-                android:id="@+id/edit_trip_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <Spinner
+                android:id="@+id/types_spinner"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp" />
 
         </LinearLayout>
 
@@ -100,58 +82,50 @@
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                 android:layout_margin="@dimen/trips_details_margin"/>
 
-            <EditText
+            <SeekBar
                 android:id="@+id/edit_trip_difficulty"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:max="4" />
 
         </LinearLayout>
 
-        <!--<CheckBox-->
-            <!--android:id="@+id/edit_trip_checked"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="@dimen/trips_details_margin"/>-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal">-->
+            <TextView
+                android:id="@+id/edit_trip_difficulty_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="95dp"
+                android:text="Very Easy"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"/>
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/birthDate"-->
-                <!--android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"-->
-                <!--android:layout_margin="@dimen/trips_details_margin"/>-->
+        </LinearLayout>
 
-            <!--<com.example.oron.androidfinalproject.InputDateTextView-->
-                <!--android:id="@+id/edit_trip_birth_date"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_margin="@dimen/trips_details_margin"/>-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <!--</LinearLayout>-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="101dp"
+                android:layout_marginLeft="5dp"
+                android:text="@string/new_trip_minimal_age"
+                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
+            <NumberPicker
+                android:id="@+id/edit_trip_minimal_age"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="5dp"/>
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="@string/birthTime"-->
-            <!--android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"-->
-            <!--android:layout_margin="@dimen/trips_details_margin"/>-->
-
-        <!--<com.example.oron.androidfinalproject.InputTimeTextView-->
-            <!--android:id="@+id/edit_trip_birth_time"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="@dimen/trips_details_margin"/>-->
-
-    <!--</LinearLayout>-->
+        </LinearLayout>
 
     </LinearLayout>
 

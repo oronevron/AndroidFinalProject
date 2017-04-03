@@ -52,66 +52,14 @@ public class NewTripFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_new_trip, container, false);
         imageView = (ImageView) view.findViewById(R.id.new_trip_imageview);
 
-        // Populate values in the types spinner
-        Spinner spinner = (Spinner) view.findViewById(R.id.types_spinner);
-
         // Set minimum and maximum values for the minimal age number picker
-        NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.new_trip_minimal_age);
+        setNumberPicker(view);
 
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(70);
+        // Populate values in the types spinner
+        setTypesDropDown(view);
 
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.types_array, android.R.layout.simple_spinner_item);
-
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-
-        // Handle seek bar change event
-        SeekBar seekBar = (SeekBar) view.findViewById(R.id.new_trip_difficulty);
-
-        seekBar.setOnSeekBarChangeListener(
-                new OnSeekBarChangeListener() {
-
-
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar,
-                                                  int progresValue, boolean fromUser) {
-
-                        // Get the trip difficulty text view
-                        TextView textView = (TextView) view.findViewById(R.id.new_trip_difficulty_value);
-
-                        switch (progresValue) {
-                            case 0: textView.setText(getResources().getString(R.string.very_easy));
-                                    difficulty = 0;
-                                    break;
-                            case 1: textView.setText(getResources().getString(R.string.easy));
-                                    difficulty = 1;
-                                    break;
-                            case 2: textView.setText(getResources().getString(R.string.medium));
-                                    difficulty = 2;
-                                    break;
-                            case 3: textView.setText(getResources().getString(R.string.hard));
-                                    difficulty = 3;
-                                    break;
-                            case 4: textView.setText(getResources().getString(R.string.very_hard));
-                                    difficulty = 4;
-                                    break;
-                        }
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                    }
-                });
+        // Sets difficulty slider
+        setDifficultySlider(view);
 
         // Handle click on cancel button
         Button cancelBtn = (Button) view.findViewById(R.id.new_trip_cancel_button);
@@ -205,5 +153,73 @@ public class NewTripFragment extends Fragment {
             imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
         }
+    }
+
+    private void setNumberPicker(final View view) {
+        NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.new_trip_minimal_age);
+
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(70);
+    }
+
+    private void setTypesDropDown( final View view) {
+
+        // Populate values in the types spinner
+        Spinner spinner = (Spinner) view.findViewById(R.id.types_spinner);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.types_array, android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+    }
+
+    private void setDifficultySlider( final View view) {
+
+        // Handle seek bar change event
+        SeekBar seekBar = (SeekBar) view.findViewById(R.id.new_trip_difficulty);
+
+        seekBar.setOnSeekBarChangeListener(
+                new OnSeekBarChangeListener() {
+
+
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar,
+                                                  int progresValue, boolean fromUser) {
+
+                        // Get the trip difficulty text view
+                        TextView textView = (TextView) view.findViewById(R.id.new_trip_difficulty_value);
+
+                        switch (progresValue) {
+                            case 0: textView.setText(getResources().getString(R.string.very_easy));
+                                difficulty = 0;
+                                break;
+                            case 1: textView.setText(getResources().getString(R.string.easy));
+                                difficulty = 1;
+                                break;
+                            case 2: textView.setText(getResources().getString(R.string.medium));
+                                difficulty = 2;
+                                break;
+                            case 3: textView.setText(getResources().getString(R.string.hard));
+                                difficulty = 3;
+                                break;
+                            case 4: textView.setText(getResources().getString(R.string.very_hard));
+                                difficulty = 4;
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                    }
+                });
     }
 }

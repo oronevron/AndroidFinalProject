@@ -11,11 +11,16 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.oron.androidfinalproject.Model.Model;
 import com.example.oron.androidfinalproject.Model.Trip;
@@ -27,7 +32,7 @@ import com.example.oron.androidfinalproject.Model.Trip;
 public class EditTripFragment extends Fragment {
 
     private Trip previousTripDetails;
-
+    int difficulty = 0;
 
     public EditTripFragment() {
         // Required empty public constructor
@@ -40,20 +45,40 @@ public class EditTripFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_edit_trip, container, false);
 
-//        final int index = this.getArguments().getInt("tripIndex");
-//        Trip trip = Model.getInstance().getTripByIndex(index);
+        // Set minimum and maximum values for the minimal age number picker
+        setNumberPicker(view);
+
+        // Sets difficulty slider
+        setDifficultySlider(view);
 
         final String index = this.getArguments().getString("tripIndex");
         final Trip trip = Model.getInstance().getTripById(index);
 
+        // Populate values in the types spinner
+        setTypesDropDown(view,trip);
+
         EditText nameEt = (EditText) view.findViewById(R.id.edit_trip_name);
         nameEt.setText(trip.getName());
-        EditText idEt = (EditText) view.findViewById(R.id.edit_trip_id);
-        idEt.setText(trip.getId());
-        EditText typeEt = (EditText) view.findViewById(R.id.edit_trip_type);
-        typeEt.setText(trip.getType());
-        EditText difficultyEt = (EditText) view.findViewById(R.id.edit_trip_difficulty);
-        difficultyEt.setText(Integer.toString(trip.getDifficulty()));
+        SeekBar difficultySb = (SeekBar) view.findViewById(R.id.edit_trip_difficulty);
+        difficultySb.setProgress(trip.getDifficulty());
+        difficulty = trip.getDifficulty();
+        TextView difficultyTv = (TextView) view.findViewById(R.id.edit_trip_difficulty_value);
+
+        switch (trip.getDifficulty()) {
+            case 0: difficultyTv.setText(getResources().getString(R.string.very_easy));
+                    break;
+            case 1: difficultyTv.setText(getResources().getString(R.string.easy));
+                    break;
+            case 2: difficultyTv.setText(getResources().getString(R.string.medium));
+                    break;
+            case 3: difficultyTv.setText(getResources().getString(R.string.hard));
+                    break;
+            case 4: difficultyTv.setText(getResources().getString(R.string.very_hard));
+                    break;
+        }
+
+        NumberPicker minimalAge = (NumberPicker) view.findViewById(R.id.edit_trip_minimal_age);
+        minimalAge.setValue(trip.getAge_min());
 
         if (trip.getImageName() != null) {
             final ImageView image = (ImageView) view.findViewById(R.id.edit_trip_image_view);
@@ -62,7 +87,6 @@ public class EditTripFragment extends Fragment {
             Model.getInstance().loadImage(trip.getImageName(), new Model.GetImageListener() {
                 @Override
                 public void onSuccess(Bitmap imagebtmp) {
-//                if (imagebtmp != null && ((Integer)cb.getTag() == position)) {
                     if (imagebtmp != null) {
                         image.setImageBitmap(imagebtmp);
                         progress.setVisibility(View.GONE);
@@ -76,17 +100,8 @@ public class EditTripFragment extends Fragment {
             });
         }
 
-
-//        CheckBox checkedCb = (CheckBox) view.findViewById(R.id.edit_trip_checked);
-//        checkedCb.setChecked(trip.getChecked());
-//        InputDateTextView birthDateIdtv = (InputDateTextView) view.findViewById(R.id.edit_trip_birth_date);
-//        birthDateIdtv.setText(trip.getDayOfMonth() + "/" + trip.getMonthOfYear() + "/" + trip.getYear());
-//        InputTimeTextView birthTimeIdtv = (InputTimeTextView) view.findViewById(R.id.edit_trip_birth_time);
-//        birthTimeIdtv.setText(trip.getHourOfDay() + ":" + trip.getMinute());
-
-
         // Save the initial trip details in temporary variable
-        previousTripDetails = new Trip(nameEt.getText().toString(), typeEt.getText().toString(), 0, Integer.parseInt(difficultyEt.getText().toString()));//, checkedCb.isChecked(), trip.getYear(), trip.getMonthOfYear(), trip.getDayOfMonth(), trip.getHourOfDay(), trip.getMinute());
+        previousTripDetails = new Trip(trip.getName(), trip.getType(), trip.getAge_min(), trip.getDifficulty());//, checkedCb.isChecked(), trip.getYear(), trip.getMonthOfYear(), trip.getDayOfMonth(), trip.getHourOfDay(), trip.getMinute());
 
         // Handle click on cancel button
         Button cancelBtn = (Button) view.findViewById(R.id.edit_trip_cancel_button);
@@ -140,51 +155,26 @@ public class EditTripFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String name;
-                String id;
                 String type;
-                int difficulty;
-                Boolean isChecked;
-                int year;
-                int monthOfYear;
-                int dayOfMonth;
-                int hourOfDay;
-                int minute;
 
                 EditText nameEt = (EditText) view.findViewById(R.id.edit_trip_name);
                 name = nameEt.getText().toString();
-                EditText idEt = (EditText) view.findViewById(R.id.edit_trip_id);
-                id = idEt.getText().toString();
-                EditText typeEt = (EditText) view.findViewById(R.id.edit_trip_type);
-                type = typeEt.getText().toString();
-                EditText difficultyEt = (EditText) view.findViewById(R.id.edit_trip_difficulty);
-                difficulty = Integer.parseInt(difficultyEt.getText().toString());
-//                try {
-//                    difficulty = Integer.parseInt(difficultyEt.getText().toString());
-//                } catch (NumberFormatException e) {
-//                    difficulty = 0;
-//                }
-//                CheckBox checkedCb = (CheckBox) view.findViewById(R.id.edit_trip_checked);
-//                isChecked = checkedCb.isChecked();
-//                InputDateTextView birthDateIdtv = (InputDateTextView) view.findViewById(R.id.edit_trip_birth_date);
-//                year = birthDateIdtv.getYear();
-//                monthOfYear = birthDateIdtv.getMonthOfYear();
-//                dayOfMonth = birthDateIdtv.getDayOfMonth();
-//                InputTimeTextView birthTimeIdtv = (InputTimeTextView) view.findViewById(R.id.edit_trip_birth_time);
-//                hourOfDay = birthTimeIdtv.getHourOfDay();
-//                minute = birthTimeIdtv.getMinute();
+                Spinner spinner = (Spinner) view.findViewById(R.id.types_spinner);
+                type = spinner.getSelectedItem().toString();
+                NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.edit_trip_minimal_age);
+                int minimalAge = numberPicker.getValue();
 
                 // Check that there is no empty field
-                if (name != null && !name.isEmpty() && id != null && !id.isEmpty() && type != null && !type.isEmpty()) {
+                if (name != null && !name.isEmpty() && type != null && !type.isEmpty()) {
 
                     // Check if there is at least one change in trip details
-                    if (!name.equals(previousTripDetails.getName()) || !id.equals(previousTripDetails.getId()) || !type.equals(previousTripDetails.getType()) || difficulty != previousTripDetails.getDifficulty()) {// || !isChecked.equals(previousTripDetails.getChecked()) ||
+                    if (!name.equals(previousTripDetails.getName()) || !type.equals(previousTripDetails.getType()) || difficulty != previousTripDetails.getDifficulty()) {// || !isChecked.equals(previousTripDetails.getChecked()) ||
 //                    year != previousTripDetails.getYear() || monthOfYear != previousTripDetails.getMonthOfYear() || dayOfMonth != previousTripDetails.getDayOfMonth() || hourOfDay != previousTripDetails.getHourOfDay() || minute != previousTripDetails.getMinute())  {
 
-                        //TODO
-//                        Model.getInstance().editTrip(new Trip(name, id, type, 0, difficulty, null), index);//, isChecked, year, monthOfYear, dayOfMonth, hourOfDay, minute), index);
+                        Trip tripToEdit = new Trip(name,type,minimalAge,difficulty);
+                        tripToEdit.setId(trip.getId());
 
-
-                        Model.getInstance().editTrip(new Trip(name, type, 0, difficulty), new Model.EditTripListener() {
+                        Model.getInstance().editTrip(tripToEdit, new Model.EditTripListener() {
                             @Override
                             public void onResult() {
                                 Intent intent = new Intent();
@@ -196,7 +186,6 @@ public class EditTripFragment extends Fragment {
                                 args.putInt("messageCode", R.string.edit_trip_success_message);
                                 args.putBoolean("isMessageOnly", false);
                                 args.putBoolean("isTripIndexSent", true);
-//                        args.putInt("tripIndex", index);
                                 args.putString("tripIndex", index);
                                 dialog.setArguments(args);
                                 dialog.show(getFragmentManager(), "TAG");
@@ -232,4 +221,74 @@ public class EditTripFragment extends Fragment {
         return view;
     }
 
+    private void setNumberPicker(final View view) {
+        NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.edit_trip_minimal_age);
+
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(70);
+    }
+
+    private void setTypesDropDown( final View view, final Trip trip) {
+
+        // Populate values in the types spinner
+        Spinner spinner = (Spinner) view.findViewById(R.id.types_spinner);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.types_array, android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+        // Set initial value in the spinner
+        spinner.setSelection(adapter.getPosition(trip.getType()));
+    }
+
+    private void setDifficultySlider( final View view) {
+
+        // Handle seek bar change event
+        SeekBar seekBar = (SeekBar) view.findViewById(R.id.edit_trip_difficulty);
+
+        seekBar.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+
+
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar,
+                                                  int progresValue, boolean fromUser) {
+
+                        // Get the trip difficulty text view
+                        TextView textView = (TextView) view.findViewById(R.id.edit_trip_difficulty_value);
+
+                        switch (progresValue) {
+                            case 0: textView.setText(getResources().getString(R.string.very_easy));
+                                difficulty = 0;
+                                break;
+                            case 1: textView.setText(getResources().getString(R.string.easy));
+                                difficulty = 1;
+                                break;
+                            case 2: textView.setText(getResources().getString(R.string.medium));
+                                difficulty = 2;
+                                break;
+                            case 3: textView.setText(getResources().getString(R.string.hard));
+                                difficulty = 3;
+                                break;
+                            case 4: textView.setText(getResources().getString(R.string.very_hard));
+                                difficulty = 4;
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                    }
+                });
+    }
 }
