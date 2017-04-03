@@ -75,24 +75,33 @@ public class ModelFirebase {
 
         trip.setId(key);
 
-        // Set the image name
-        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        String imName = "image_" + key + "_" + timeStamp + ".jpg";
+        // Check if we need to save image or not and act accordingly
+        if(imageBitmap != null)
+        {
+            // Set the image name
+            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            String imName = "image_" + key + "_" + timeStamp + ".jpg";
 
-        // Add image to firebase and local storage
-        Model.getInstance().saveImage(imageBitmap, imName, new Model.SaveImageListener() {
-            @Override
-            public void complete(String url) {
-                trip.setImageName(url);
-                myRef.child(key).setValue(trip.toMap());
-                TripSql.addTrip(Model.getInstance().modelSql.getWritableDB(), trip);
-            }
+            // Add image to firebase and local storage
+            Model.getInstance().saveImage(imageBitmap, imName, new Model.SaveImageListener() {
+                @Override
+                public void complete(String url) {
+                    trip.setImageName(url);
+                    myRef.child(key).setValue(trip.toMap());
+                    TripSql.addTrip(Model.getInstance().modelSql.getWritableDB(), trip);
+                }
 
-            @Override
-            public void fail() {
+                @Override
+                public void fail() {
 
-            }
-        });
+                }
+            });
+        }
+        else
+        {
+            myRef.child(key).setValue(trip.toMap());
+            TripSql.addTrip(Model.getInstance().modelSql.getWritableDB(), trip);
+        }
     }
 
     public void deleteTrip(final String id, final Model.DeleteTripListener listener) {
