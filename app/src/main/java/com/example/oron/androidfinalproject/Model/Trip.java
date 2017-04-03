@@ -86,7 +86,7 @@ public class Trip {
         result.put("imageName", imageName);
         result.put("type", type);
         result.put("difficulty", difficulty);
-//        result.put("checked", checked);
+        result.put("age_min", age_min);
         result.put("lastUpdated", ServerValue.TIMESTAMP);
         return result;
     }
