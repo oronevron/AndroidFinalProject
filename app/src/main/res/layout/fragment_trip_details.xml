@@ -18,8 +18,10 @@
 
         <ImageView
             android:id="@+id/trip_details_imageview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="400dp"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            android:layout_gravity="center"
             android:src="@drawable/trip"
             android:layout_margin="@dimen/trips_details_margin"/>
 

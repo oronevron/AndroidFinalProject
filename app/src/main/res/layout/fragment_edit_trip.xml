@@ -18,8 +18,10 @@
 
         <ImageView
             android:id="@+id/edit_trip_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="400dp"
+            android:layout_height="200dp"
+            android:scaleType="fitXY"
+            android:layout_gravity="center"
             android:src="@drawable/trip"
             android:layout_margin="@dimen/trips_details_margin"/>
 
@@ -108,12 +110,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="start"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="101dp"
+                android:layout_marginTop="50dp"
                 android:layout_marginLeft="5dp"
                 android:text="@string/new_trip_minimal_age"
                 android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
@@ -122,7 +125,7 @@
                 android:id="@+id/edit_trip_minimal_age"
                 android:layout_width="75dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginLeft="5dp"/>
 
         </LinearLayout>
