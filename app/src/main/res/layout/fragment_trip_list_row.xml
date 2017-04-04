@@ -16,8 +16,9 @@
 
         <ImageView
             android:id="@+id/tripRowImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="140dp"
+            android:layout_height="70dp"
+            android:scaleType="fitXY"
             android:src="@drawable/trip" />
 
         <ProgressBar
@@ -28,28 +29,13 @@
             style="@android:style/Widget.Holo.ProgressBar.Horizontal"
             android:indeterminate="true" />
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-                android:id="@+id/tripRowName"
-                android:layout_marginTop="@dimen/trips_list_row_top_margin"
-                android:layout_marginLeft="@dimen/trips_list_row_left_margin" />
-
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+            android:id="@+id/tripRowName"
+            android:gravity="center"/>
 
     </LinearLayout>
-
-    <!--<CheckBox-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="0"-->
-        <!--android:id="@+id/tripRowCheckBox"-->
-        <!--android:focusable="false" />-->
 
 </LinearLayout>
