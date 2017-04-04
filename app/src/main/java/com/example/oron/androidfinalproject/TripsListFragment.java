@@ -63,7 +63,9 @@ public class TripsListFragment extends Fragment {
             @Override
             public void onResult(List<Trip> trips) {
                 progressBar.setVisibility(View.GONE);
+
                 tripsList = trips;
+
                 adapter.notifyDataSetChanged();
             }
 
@@ -111,36 +113,60 @@ public class TripsListFragment extends Fragment {
         }
 
         @Override
+        public int getViewTypeCount() {
+
+            if (getCount() != 0)
+                return getCount();
+
+            return 1;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+
+            return position;
+        }
+
+        @Override
         public View getView(final int i, View view, ViewGroup viewGroup) {
             if (view == null){
                 view = getActivity().getLayoutInflater().inflate(R.layout.fragment_trip_list_row, null);
             }
 
-            Trip trip = tripsList.get(i);
+            final Trip trip = tripsList.get(i);
             final ImageView image = (ImageView) view.findViewById(R.id.tripRowImageView);
             image.setVisibility(View.GONE);
             TextView nameTv = (TextView) view.findViewById(R.id.tripRowName);
             nameTv.setText(trip.getName());
 
-            if (trip.getImageName() != null) {
-                final ProgressBar progress = (ProgressBar) view.findViewById(R.id.tripRowImageProgressBar);
-                progress.setVisibility(View.VISIBLE);
-                Model.getInstance().loadImage(trip.getImageName(), new Model.GetImageListener() {
-                    @Override
-                    public void onSuccess(Bitmap imagebtmp) {
-                        if (imagebtmp != null) {
-                            image.setImageBitmap(imagebtmp);
+            if (trip.getImageName() != null)
+            {
+                if(trip.getImage() == null)
+                {
+                    final ProgressBar progress = (ProgressBar) view.findViewById(R.id.tripRowImageProgressBar);
+                    progress.setVisibility(View.VISIBLE);
+                    Model.getInstance().loadImage(trip.getImageName(),new Model.GetImageListener() {
+                        @Override
+                        public void onSuccess(Bitmap imagebtmp) {
+                                image.setImageBitmap(imagebtmp);
+                                image.setVisibility(View.VISIBLE);
+                                progress.setVisibility(View.GONE);
+                                trip.setImage(imagebtmp);
+                        }
+
+                        @Override
+                        public void onFail() {
                             image.setVisibility(View.VISIBLE);
                             progress.setVisibility(View.GONE);
                         }
-                    }
+                    });
+                }
+                else
+                {
+                    image.setImageBitmap(trip.getImage());
+                    image.setVisibility(View.VISIBLE);
+                }
 
-                    @Override
-                    public void onFail() {
-                        image.setVisibility(View.VISIBLE);
-                        progress.setVisibility(View.GONE);
-                    }
-                });
             } else {
                 image.setImageResource(R.drawable.trip);
                 image.setVisibility(View.VISIBLE);

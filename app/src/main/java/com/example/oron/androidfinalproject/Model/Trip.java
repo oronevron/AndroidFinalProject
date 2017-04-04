@@ -1,5 +1,7 @@
 package com.example.oron.androidfinalproject.Model;
 
+import android.graphics.Bitmap;
+
 import com.google.firebase.database.ServerValue;
 
 import java.util.HashMap;
@@ -12,6 +14,7 @@ public class Trip {
     private int age_min;
     private int difficulty;
     private String imageName;
+    private Bitmap image;
     private double lastUpdated;
 
     public Trip(String name, String type, int age_min, int difficulty) {// int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
@@ -78,6 +81,12 @@ public class Trip {
     public void setLastUpdated(Double lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {this.image = image; }
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
