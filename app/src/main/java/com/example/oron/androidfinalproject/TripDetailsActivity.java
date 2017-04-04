@@ -9,6 +9,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.oron.androidfinalproject.Model.Model;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class TripDetailsActivity extends AppCompatActivity {
 
     @Override
@@ -54,6 +58,28 @@ public class TripDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_trip_details_menu, menu);
+
+        // Hide the "edit" menu item depending on wether user has authority to edit or not
+        MenuItem editItem = menu.findItem(R.id.edit_trip_button);
+
+        // Get the current trip's user creator
+        Intent intent = getIntent();
+        String index = intent.getExtras().get("tripIndex").toString();
+        String tripCreatorId = Model.getInstance().getTripById(index).getUserId();
+
+        // Get the current user
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user.getUid();
+
+        // If the user isn't the trip's creator, hide the edit button
+        if(!userId.equals(tripCreatorId))
+        {
+            editItem.setVisible(false);
+        }
+        else
+        {
+            editItem.setVisible(true);
+        }
 
         return super.onCreateOptionsMenu(menu);
     }

@@ -15,6 +15,7 @@ public class TripSql {
     final static String TRIP_TABLE_AGE_MIN = "age_min";
     final static String TRIP_TABLE_DIFFICULTY = "difficulty";
     final static String TRIP_TABLE_IMAGE_NAME = "image_name";
+    final static String TRIP_TABLE_USER_ID = "user_id";
 
     static public void create(SQLiteDatabase db) {
         db.execSQL("create table " + TRIP_TABLE + " (" +
@@ -23,7 +24,8 @@ public class TripSql {
                 TRIP_TABLE_TYPE + " TEXT," +
                 TRIP_TABLE_AGE_MIN + " INTEGER," +
                 TRIP_TABLE_DIFFICULTY + " INTEGER," +
-                TRIP_TABLE_IMAGE_NAME + " TEXT);");
+                TRIP_TABLE_IMAGE_NAME + " TEXT," +
+                TRIP_TABLE_USER_ID + " TEXT);");
     }
 
     public static void drop(SQLiteDatabase db) {
@@ -41,6 +43,7 @@ public class TripSql {
             int ageMinIndex = cursor.getColumnIndex(TRIP_TABLE_AGE_MIN);
             int difficultyIndex = cursor.getColumnIndex(TRIP_TABLE_DIFFICULTY);
             int imageNameIndex = cursor.getColumnIndex(TRIP_TABLE_IMAGE_NAME);
+            int userIdIndex = cursor.getColumnIndex(TRIP_TABLE_USER_ID);
             do {
                 String id = cursor.getString(idIndex);
                 String name = cursor.getString(nameIndex);
@@ -48,9 +51,11 @@ public class TripSql {
                 Integer age_min = cursor.getInt(ageMinIndex);
                 Integer difficulty = cursor.getInt(difficultyIndex);
                 String imageName = cursor.getString(imageNameIndex);
+                String user_id = cursor.getString(userIdIndex);
                 Trip trip = new Trip(name, type, age_min, difficulty);
                 trip.setId(id);
                 trip.setImageName(imageName);
+                trip.setUserId(user_id);
                 trips.add(trip);
             } while (cursor.moveToNext());
         }
@@ -69,15 +74,18 @@ public class TripSql {
             int ageMinIndex = cursor.getColumnIndex(TRIP_TABLE_AGE_MIN);
             int difficultyIndex = cursor.getColumnIndex(TRIP_TABLE_DIFFICULTY);
             int imageNameIndex = cursor.getColumnIndex(TRIP_TABLE_IMAGE_NAME);
+            int userIdIndex = cursor.getColumnIndex(TRIP_TABLE_USER_ID);
             String trip_id = cursor.getString(idIndex);
             String name = cursor.getString(nameIndex);
             String type = cursor.getString(typeIndex);
             Integer age_min = cursor.getInt(ageMinIndex);
             Integer difficulty = cursor.getInt(difficultyIndex);
             String imageName = cursor.getString(imageNameIndex);
+            String user_id = cursor.getString(userIdIndex);
             Trip trip = new Trip(name, type, age_min, difficulty);
             trip.setId(trip_id);
             trip.setImageName(imageName);
+            trip.setUserId(user_id);
             return trip;
         }
         return null;
@@ -91,6 +99,7 @@ public class TripSql {
         values.put(TRIP_TABLE_AGE_MIN, trip.getAge_min());
         values.put(TRIP_TABLE_DIFFICULTY, trip.getDifficulty());
         values.put(TRIP_TABLE_IMAGE_NAME, trip.getImageName());
+        values.put(TRIP_TABLE_USER_ID, trip.getUserId());
         db.insertWithOnConflict(TRIP_TABLE, TRIP_TABLE_ID, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 

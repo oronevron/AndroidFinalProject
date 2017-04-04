@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.List;
 
 public class ModelSql {
-    final static int VERSION = 20;
+    final static int VERSION = 25;
 
     Helper sqlDb;
 

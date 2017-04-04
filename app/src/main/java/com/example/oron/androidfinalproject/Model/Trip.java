@@ -10,6 +10,7 @@ import java.util.Map;
 public class Trip {
     private String name;
     private String id;
+    private String user_id;
     private String type;
     private int age_min;
     private int difficulty;
@@ -40,6 +41,14 @@ public class Trip {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUserId() {
+        return user_id;
+    }
+
+    public void setUserId(String user_id) {
+        this.user_id = user_id;
     }
 
     public String getType() {
@@ -97,6 +106,7 @@ public class Trip {
         result.put("difficulty", difficulty);
         result.put("age_min", age_min);
         result.put("lastUpdated", ServerValue.TIMESTAMP);
+        result.put("user_id", user_id);
         return result;
     }
 }

@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.example.oron.androidfinalproject.Model.Model;
 import com.example.oron.androidfinalproject.Model.Trip;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.w3c.dom.Text;
 
@@ -98,7 +100,14 @@ public class NewTripFragment extends Fragment {
                 if (name != null && !name.isEmpty() && type != null && !type.isEmpty()) {
 
                     final Trip trip = new Trip(name, type, minimalAge, difficulty);
-//                    saveTripAndClose(trip);
+
+                    // Get the current user
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    // Set the user as the trip's creator
+                    // This will be used later to allow only this user to edit or delete the trip
+                    trip.setUserId(user.getUid());
+
                     Model.getInstance().addTrip(trip, imageBitmap, new Model.AddTripListener() {
                         @Override
                         public void onResult() {
