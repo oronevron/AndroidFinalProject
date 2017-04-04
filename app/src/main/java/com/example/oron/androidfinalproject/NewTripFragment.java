@@ -97,7 +97,7 @@ public class NewTripFragment extends Fragment {
                 minimalAge = numberPicker.getValue();
 
                 // Check that there is no empty field
-                if (name != null && !name.isEmpty() && type != null && !type.isEmpty()) {
+                if (name != null && !name.isEmpty()) {
 
                     final Trip trip = new Trip(name, type, minimalAge, difficulty);
 
