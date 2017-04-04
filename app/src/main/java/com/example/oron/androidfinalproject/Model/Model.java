@@ -97,6 +97,7 @@ public class Model {
 
                 if(tripsToDelete != null && tripsToDelete.size() > 0) {
                     for (Trip tripToDelete : tripsToDelete) {
+                        removeImageFromDevice(tripToDelete.getImageName());
                         TripSql.deleteTrip(modelSql.getWritableDB(), tripToDelete.getId());
                     }
                 }
