@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -32,15 +33,21 @@ public class ModelFirebase {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final List<Trip> tripList = new LinkedList<Trip>();
+                final List<Trip> tripsToDelete = new LinkedList<Trip>();
                 for (DataSnapshot tripSnapshot : dataSnapshot.getChildren()) {
                     Trip trip = tripSnapshot.getValue(Trip.class);
 
                     trip.setId(tripSnapshot.getKey());
 
                     Log.d("TAG", trip.getName() + " - " + trip.getId());
-                    tripList.add(trip);
+
+                    if (!trip.getIsDeleted()) {
+                        tripList.add(trip);
+                    } else {
+                        tripsToDelete.add(trip);
+                    }
                 }
-                listener.onResult(tripList);
+                listener.onResult(tripList, tripsToDelete);
             }
 
             @Override
@@ -87,12 +94,32 @@ public class ModelFirebase {
     }
 
     public void deleteTrip(final String id, final Model.DeleteTripListener listener) {
-        DatabaseReference myRef = database.getReference("trips").child(id);
-        myRef.removeValue(new DatabaseReference.CompletionListener() {
+        final DatabaseReference myRef = database.getReference("trips").child(id);
+//        myRef.removeValue(new DatabaseReference.CompletionListener() {
+//            @Override
+//            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+//                if (databaseError == null) {
+//                    listener.onResult(id);
+//                } else {
+//                    listener.onCancel();
+//                }
+//            }
+//        });
+
+        myRef.child("isDeleted").setValue(true, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError == null) {
-                    listener.onResult(id);
+                    myRef.child("lastUpdated").setValue(ServerValue.TIMESTAMP, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                            if (databaseError == null) {
+                                listener.onResult(id);
+                            } else {
+                                listener.onCancel();
+                            }
+                        }
+                    });
                 } else {
                     listener.onCancel();
                 }
@@ -169,7 +196,7 @@ public class ModelFirebase {
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                System.out.println("onChildChanged: " + previousChildName);
+                System.out.println("onChildChanged: " + dataSnapshot.getKey());
 //                Trip test = TripSql.getTripById(Model.getInstance().modelSql.getReadbleDB(), dataSnapshot.getKey());
 //                TripSql.editTrip(Model.getInstance().modelSql.getWritableDB(), dataSnapshot.getValue(Trip.class));
 //                Trip test2 = TripSql.getTripById(Model.getInstance().modelSql.getReadbleDB(), dataSnapshot.getKey());

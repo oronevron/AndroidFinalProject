@@ -61,7 +61,7 @@ public class TripsListFragment extends Fragment {
 //        tripsList = Model.getInstance().getAllTrips();
         Model.getInstance().getAllTripsAsynch(new Model.GetTripsListener() {
             @Override
-            public void onResult(List<Trip> trips) {
+            public void onResult(List<Trip> trips, List<Trip> tripsToDelete) {
                 progressBar.setVisibility(View.GONE);
 
                 tripsList = trips;

@@ -66,7 +66,7 @@ public class Model {
 //    }
 
     public interface GetTripsListener{
-        public void onResult(List<Trip> trips);
+        public void onResult(List<Trip> trips, List<Trip> tripsToDelete);
         public void onCancel();
     }
 
@@ -77,7 +77,7 @@ public class Model {
         //2. get all trips records that where updated since last update date
         modelFirebase.getAllTripsAsynch(lastUpdateDate, new GetTripsListener() {
             @Override
-            public void onResult(List<Trip> trips) {
+            public void onResult(List<Trip> trips, List<Trip> tripsToDelete) {
                 if(trips != null && trips.size() > 0) {
                     //3. update the local DB
                     double recentUpdate = lastUpdateDate;
@@ -92,11 +92,17 @@ public class Model {
 
 
 //                        tripsData.add(s);
+                }
+
+                if(tripsToDelete != null && tripsToDelete.size() > 0) {
+                    for (Trip tripToDelete : tripsToDelete) {
+                        TripSql.deleteTrip(modelSql.getWritableDB(), tripToDelete.getId());
                     }
+                }
 
                 //return the complete trip list to the caller
                 List<Trip> res = TripSql.getAllTrips(modelSql.getReadbleDB());
-                listener.onResult(res);
+                listener.onResult(res, null);
             }
 
             @Override
