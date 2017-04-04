@@ -3,6 +3,7 @@ package com.example.oron.androidfinalproject.Model;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -186,6 +187,7 @@ public class Model {
         modelFirebase.deleteTrip(id, new DeleteTripListener() {
             @Override
             public void onResult(String id) {
+                removeImageFromDevice(TripSql.getTripById(modelSql.getReadbleDB(), id).getImageName());
                 TripSql.deleteTrip(modelSql.getReadbleDB(), id);
                 listener.onResult(id);
             }
@@ -253,6 +255,12 @@ public class Model {
         MyApplication.getAppContext().sendBroadcast(mediaScanIntent);
     }
 
+    private void refreshGallery(){
+        MediaScannerConnection.scanFile(MyApplication.getAppContext(),
+                new String[] { Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() },
+                null, null);
+    }
+
     private void saveImageToFile(Bitmap imageBitmap, String imageFileName){
         try {
             File dir = Environment.getExternalStoragePublicDirectory(
@@ -272,6 +280,21 @@ public class Model {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void removeImageFromDevice(String imageFileName) {
+        String localFileName = getLocalImageFileName(imageFileName);
+        File dir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File fdelete = new File(dir + "/" + localFileName);
+        if (fdelete.exists()) {
+            if (fdelete.delete()) {
+                refreshGallery();
+                System.out.println("file Deleted :" + dir + "/" + localFileName);
+            } else {
+                System.out.println("file not Deleted :" + dir + "/" + localFileName);
+            }
         }
     }
 
