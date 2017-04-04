@@ -65,7 +65,7 @@ public class TripDetailsActivity extends AppCompatActivity {
         // Get the current trip's user creator
         Intent intent = getIntent();
         String index = intent.getExtras().get("tripIndex").toString();
-        String tripCreatorId = Model.getInstance().getTripById(index).getUserId();
+        String tripCreatorId = Model.getInstance().getTripById(index).getUser_id();
 
         // Get the current user
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

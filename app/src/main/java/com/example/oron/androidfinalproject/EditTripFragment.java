@@ -177,7 +177,7 @@ public class EditTripFragment extends Fragment {
                         Trip tripToEdit = new Trip(name,type,minimalAge,difficulty);
                         tripToEdit.setId(trip.getId());
                         tripToEdit.setImageName(trip.getImageName());
-                        tripToEdit.setUserId(trip.getUserId());
+                        tripToEdit.setUser_id(trip.getUser_id());
 
                         Model.getInstance().editTrip(tripToEdit, new Model.EditTripListener() {
                             @Override

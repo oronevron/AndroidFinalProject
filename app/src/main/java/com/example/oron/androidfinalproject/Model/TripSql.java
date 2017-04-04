@@ -55,7 +55,7 @@ public class TripSql {
                 Trip trip = new Trip(name, type, age_min, difficulty);
                 trip.setId(id);
                 trip.setImageName(imageName);
-                trip.setUserId(user_id);
+                trip.setUser_id(user_id);
                 trips.add(trip);
             } while (cursor.moveToNext());
         }
@@ -85,7 +85,7 @@ public class TripSql {
             Trip trip = new Trip(name, type, age_min, difficulty);
             trip.setId(trip_id);
             trip.setImageName(imageName);
-            trip.setUserId(user_id);
+            trip.setUser_id(user_id);
             return trip;
         }
         return null;
@@ -99,7 +99,7 @@ public class TripSql {
         values.put(TRIP_TABLE_AGE_MIN, trip.getAge_min());
         values.put(TRIP_TABLE_DIFFICULTY, trip.getDifficulty());
         values.put(TRIP_TABLE_IMAGE_NAME, trip.getImageName());
-        values.put(TRIP_TABLE_USER_ID, trip.getUserId());
+        values.put(TRIP_TABLE_USER_ID, trip.getUser_id());
         db.insertWithOnConflict(TRIP_TABLE, TRIP_TABLE_ID, values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 

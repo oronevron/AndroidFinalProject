@@ -106,7 +106,7 @@ public class NewTripFragment extends Fragment {
 
                     // Set the user as the trip's creator
                     // This will be used later to allow only this user to edit or delete the trip
-                    trip.setUserId(user.getUid());
+                    trip.setUser_id(user.getUid());
 
                     Model.getInstance().addTrip(trip, imageBitmap, new Model.AddTripListener() {
                         @Override
