@@ -128,6 +128,9 @@ public class Model {
     }
 
     public void addTrip(final Trip trip, final Bitmap imageBitmap, final AddTripListener listener){
+        // Get new key from Firebase
+        trip.setId(modelFirebase.getNewKey());
+
         // Check if we need to save image or not and act accordingly
         if (imageBitmap != null) {
             // Set the image name

@@ -67,13 +67,14 @@ public class ModelFirebase {
 //        });
 //    }
 
+    public String getNewKey() {
+        return database.getReference("trips").push().getKey();
+    }
+
     public void addTrip(Trip trip, Bitmap imageBitmap, final Model.AddTripListener listener) {
         final DatabaseReference myRef = database.getReference("trips");
-        final String key = myRef.push().getKey();
 
-        trip.setId(key);
-
-        myRef.child(key).setValue(trip.toMap(), new DatabaseReference.CompletionListener() {
+        myRef.child(trip.getId()).setValue(trip.toMap(), new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError == null) {
