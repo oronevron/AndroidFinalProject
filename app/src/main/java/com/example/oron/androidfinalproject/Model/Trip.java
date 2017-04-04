@@ -17,6 +17,7 @@ public class Trip {
     private String imageName;
     private Bitmap image;
     private double lastUpdated;
+    private boolean isDeleted;
 
     public Trip(String name, String type, int age_min, int difficulty) {// int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
         this.name = name;
@@ -95,6 +96,14 @@ public class Trip {
         return image;
     }
 
+    public boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     public void setImage(Bitmap image) {this.image = image; }
 
     public Map<String, Object> toMap() {
@@ -107,6 +116,7 @@ public class Trip {
         result.put("age_min", age_min);
         result.put("lastUpdated", ServerValue.TIMESTAMP);
         result.put("user_id", user_id);
+        result.put("isDeleted", isDeleted);
         return result;
     }
 }
