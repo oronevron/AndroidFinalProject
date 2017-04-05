@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
 
     TripsListFragment tripsListFragment = new TripsListFragment();
+    private static MenuItem refreshButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
 
+        refreshButton = menu.findItem(R.id.refresh_button);
+        changeRefreshButtonIcon(false);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -121,6 +125,15 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(), NewTripActivity.class);
                 startActivityForResult(intent, 1);
+
+                return true;
+
+            // Handle click on refresh button
+            case R.id.refresh_button:
+                tripsListFragment.setTripsList(Model.getInstance().refreshTripsList());
+                tripsListFragment.getAdapter().notifyDataSetChanged();
+                Toast.makeText(this, R.string.refresh_button_message, Toast.LENGTH_LONG).show();
+                changeRefreshButtonIcon(false);
 
                 return true;
 
@@ -149,6 +162,14 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         if (authListener != null) {
             auth.removeAuthStateListener(authListener);
+        }
+    }
+
+    public static void changeRefreshButtonIcon(boolean isNoUpToDate) {
+        if (isNoUpToDate) {
+            refreshButton.setIcon(R.drawable.ic_refresh_black_24dp);
+        } else {
+            refreshButton.setIcon(R.drawable.ic_refresh_white_24dp);
         }
     }
 

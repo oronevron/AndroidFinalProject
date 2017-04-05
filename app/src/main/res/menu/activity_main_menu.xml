@@ -4,7 +4,13 @@
 
     <item android:id="@+id/new_trip_button"
           android:title="@string/new_trip_button"
+          android:icon="@android:drawable/ic_menu_add"
           compat:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/refresh_button"
+        android:title="@string/refresh_button"
+        android:icon="@android:drawable/ic_menu_rotate"
+        compat:showAsAction="ifRoom"/>
 
     <item android:id="@+id/sign_out_button"
           android:title="@string/btn_sign_out"

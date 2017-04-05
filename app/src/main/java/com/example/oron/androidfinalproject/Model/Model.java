@@ -28,6 +28,7 @@ public class Model {
     ModelFirebase modelFirebase;
     ModelSql modelSql;
     private List<Trip> tripsData = new LinkedList<Trip>();
+//    private boolean isNoUpToDate = false;
 
     private Model() {
 
@@ -64,6 +65,15 @@ public class Model {
 
 //    public Trip getTripByIndex(int index) {
 //        return tripsData.get(index);
+//    }
+
+
+//    public boolean isNoUpToDate() {
+//        return isNoUpToDate;
+//    }
+//
+//    public void setNoUpToDate(boolean noUpToDate) {
+//        isNoUpToDate = noUpToDate;
 //    }
 
     public interface GetTripsListener{
@@ -284,7 +294,7 @@ public class Model {
         }
     }
 
-    private void removeImageFromDevice(String imageFileName) {
+    public void removeImageFromDevice(String imageFileName) {
         String localFileName = getLocalImageFileName(imageFileName);
         File dir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);

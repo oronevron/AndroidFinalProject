@@ -4,6 +4,7 @@
 
     <item android:id="@+id/edit_trip_button"
         android:title="@string/edit_trip_button"
+        android:icon="@android:drawable/ic_menu_edit"
         compat:showAsAction="ifRoom"/>
 
 </menu>
