@@ -55,8 +55,8 @@ public class TripDetailsFragment extends Fragment {
                     break;
         }
         difficultyTv.setText("Difficulty: " + diffDesc);
-        TextView minimalAgeTv = (TextView) view.findViewById(R.id.trip_details_minimal_age);
-        minimalAgeTv.setText("Minimal Age: " + trip.getAge_min());
+        TextView descriptionTv = (TextView) view.findViewById(R.id.trip_details_description);
+        descriptionTv.setText("Description: " + trip.getDescription());
 
         if (trip.getImageName() != null) {
             final ImageView image = (ImageView) view.findViewById(R.id.trip_details_imageview);

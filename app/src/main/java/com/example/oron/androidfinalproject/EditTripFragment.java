@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +32,11 @@ import com.example.oron.androidfinalproject.Model.Trip;
  */
 public class EditTripFragment extends Fragment {
 
+    ImageView imageView = null;
+    Bitmap imageBitmap = null;
     private Trip previousTripDetails;
     int difficulty = 0;
+    boolean imageChanged = false;
 
     public EditTripFragment() {
         // Required empty public constructor
@@ -45,11 +49,18 @@ public class EditTripFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_edit_trip, container, false);
 
-        // Set minimum and maximum values for the minimal age number picker
-        setNumberPicker(view);
-
         // Sets difficulty slider
         setDifficultySlider(view);
+
+        // Set touch handler for the image
+        imageView = (ImageView) view.findViewById(R.id.edit_trip_image_view);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takingPicture();
+            }
+        });
 
         final String index = this.getArguments().getString("tripIndex");
         final Trip trip = Model.getInstance().getTripById(index);
@@ -63,6 +74,8 @@ public class EditTripFragment extends Fragment {
         difficultySb.setProgress(trip.getDifficulty());
         difficulty = trip.getDifficulty();
         TextView difficultyTv = (TextView) view.findViewById(R.id.edit_trip_difficulty_value);
+        EditText descEt = (EditText) view.findViewById(R.id.edit_trip_description);
+        descEt.setText(trip.getDescription());
 
         switch (trip.getDifficulty()) {
             case 0: difficultyTv.setText(getResources().getString(R.string.very_easy));
@@ -77,18 +90,15 @@ public class EditTripFragment extends Fragment {
                     break;
         }
 
-        NumberPicker minimalAge = (NumberPicker) view.findViewById(R.id.edit_trip_minimal_age);
-        minimalAge.setValue(trip.getAge_min());
-
         if (trip.getImageName() != null) {
-            final ImageView image = (ImageView) view.findViewById(R.id.edit_trip_image_view);
+
             final ProgressBar progress = (ProgressBar) view.findViewById(R.id.edit_trip_image_progress_bar);
             progress.setVisibility(View.VISIBLE);
             Model.getInstance().loadImage(trip.getImageName(), new Model.GetImageListener() {
                 @Override
                 public void onSuccess(Bitmap imagebtmp) {
                     if (imagebtmp != null) {
-                        image.setImageBitmap(imagebtmp);
+                        imageView.setImageBitmap(imagebtmp);
                         progress.setVisibility(View.GONE);
                     }
                 }
@@ -101,7 +111,7 @@ public class EditTripFragment extends Fragment {
         }
 
         // Save the initial trip details in temporary variable
-        previousTripDetails = new Trip(trip.getName(), trip.getType(), trip.getAge_min(), trip.getDifficulty());//, checkedCb.isChecked(), trip.getYear(), trip.getMonthOfYear(), trip.getDayOfMonth(), trip.getHourOfDay(), trip.getMinute());
+        previousTripDetails = new Trip(trip.getName(), trip.getType(), trip.getDescription(), trip.getDifficulty());//, checkedCb.isChecked(), trip.getYear(), trip.getMonthOfYear(), trip.getDayOfMonth(), trip.getHourOfDay(), trip.getMinute());
 
         // Handle click on cancel button
         Button cancelBtn = (Button) view.findViewById(R.id.edit_trip_cancel_button);
@@ -156,13 +166,14 @@ public class EditTripFragment extends Fragment {
             public void onClick(View v) {
                 String name;
                 String type;
+                String description;
 
                 EditText nameEt = (EditText) view.findViewById(R.id.edit_trip_name);
                 name = nameEt.getText().toString();
                 Spinner spinner = (Spinner) view.findViewById(R.id.types_spinner);
                 type = spinner.getSelectedItem().toString();
-                NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.edit_trip_minimal_age);
-                int minimalAge = numberPicker.getValue();
+                EditText descEt = (EditText) view.findViewById(R.id.edit_trip_description);
+                description = descEt.getText().toString();
 
                 // Check that there is no empty field
                 if (name != null && !name.isEmpty()) {
@@ -171,15 +182,17 @@ public class EditTripFragment extends Fragment {
                     if (!name.equals(previousTripDetails.getName()) ||
                             !type.equals(previousTripDetails.getType()) ||
                             difficulty != previousTripDetails.getDifficulty() ||
-                            minimalAge != previousTripDetails.getAge_min()) {// || !isChecked.equals(previousTripDetails.getChecked()) ||
+                            !description.equals(previousTripDetails.getDescription()) ||
+                            imageChanged == true)
+                            {// || !isChecked.equals(previousTripDetails.getChecked()) ||
 //                    year != previousTripDetails.getYear() || monthOfYear != previousTripDetails.getMonthOfYear() || dayOfMonth != previousTripDetails.getDayOfMonth() || hourOfDay != previousTripDetails.getHourOfDay() || minute != previousTripDetails.getMinute())  {
 
-                        Trip tripToEdit = new Trip(name,type,minimalAge,difficulty);
+                        Trip tripToEdit = new Trip(name,type,description,difficulty);
                         tripToEdit.setId(trip.getId());
                         tripToEdit.setImageName(trip.getImageName());
                         tripToEdit.setUser_id(trip.getUser_id());
 
-                        Model.getInstance().editTrip(tripToEdit, new Model.EditTripListener() {
+                        Model.getInstance().editTrip(tripToEdit, imageBitmap, new Model.EditTripListener() {
                             @Override
                             public void onResult() {
                                 Intent intent = new Intent();
@@ -224,13 +237,6 @@ public class EditTripFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
-    }
-
-    private void setNumberPicker(final View view) {
-        NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.edit_trip_minimal_age);
-
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(70);
     }
 
     private void setTypesDropDown( final View view, final Trip trip) {
@@ -295,5 +301,24 @@ public class EditTripFragment extends Fragment {
                     public void onStopTrackingTouch(SeekBar seekBar) {
                     }
                 });
+    }
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    private void takingPicture(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            Bundle extras = data.getExtras();
+            imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+            imageChanged = true;
+        }
     }
 }

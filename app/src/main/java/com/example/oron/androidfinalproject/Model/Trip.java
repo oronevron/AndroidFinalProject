@@ -12,17 +12,16 @@ public class Trip {
     private String id;
     private String user_id;
     private String type;
-    private int age_min;
+    private String description;
     private int difficulty;
     private String imageName;
-    private Bitmap image;
     private double lastUpdated;
     private boolean isDeleted;
 
-    public Trip(String name, String type, int age_min, int difficulty) {// int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
+    public Trip(String name, String type, String description, int difficulty) {// int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
         this.name = name;
         this.type = type;
-        this.age_min = age_min;
+        this.description = description;
         this.difficulty = difficulty;
     }
 
@@ -60,12 +59,12 @@ public class Trip {
         this.type = type;
     }
 
-    public int getAge_min() {
-        return age_min;
+    public String getDescription() {
+        return description;
     }
 
-    public void setAge_min(int age_min) {
-        this.age_min = age_min;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getDifficulty() {
@@ -92,10 +91,6 @@ public class Trip {
         this.lastUpdated = lastUpdated;
     }
 
-    public Bitmap getImage() {
-        return image;
-    }
-
     public boolean getIsDeleted() {
         return isDeleted;
     }
@@ -104,16 +99,13 @@ public class Trip {
         isDeleted = deleted;
     }
 
-    public void setImage(Bitmap image) {this.image = image; }
-
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-//        result.put("id", id);
         result.put("name", name);
         result.put("imageName", imageName);
         result.put("type", type);
         result.put("difficulty", difficulty);
-        result.put("age_min", age_min);
+        result.put("description", description);
         result.put("lastUpdated", ServerValue.TIMESTAMP);
         result.put("user_id", user_id);
         result.put("isDeleted", isDeleted);

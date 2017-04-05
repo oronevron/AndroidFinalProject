@@ -55,7 +55,7 @@
             android:layout_margin="@dimen/trips_details_margin"/>
 
         <TextView
-            android:id="@+id/trip_details_minimal_age"
+            android:id="@+id/trip_details_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"

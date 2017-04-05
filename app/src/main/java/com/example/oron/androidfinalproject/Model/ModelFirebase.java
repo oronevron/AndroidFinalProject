@@ -78,7 +78,7 @@ public class ModelFirebase {
         return database.getReference("trips").push().getKey();
     }
 
-    public void addTrip(Trip trip, Bitmap imageBitmap, final Model.AddTripListener listener) {
+    public void addTrip(Trip trip, final Model.AddTripListener listener) {
         final DatabaseReference myRef = database.getReference("trips");
 
         myRef.child(trip.getId()).setValue(trip.toMap(), new DatabaseReference.CompletionListener() {

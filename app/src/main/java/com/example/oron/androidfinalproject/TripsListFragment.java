@@ -139,34 +139,23 @@ public class TripsListFragment extends Fragment {
             TextView nameTv = (TextView) view.findViewById(R.id.tripRowName);
             nameTv.setText(trip.getName());
 
-            if (trip.getImageName() != null)
-            {
-                if(trip.getImage() == null)
-                {
-                    final ProgressBar progress = (ProgressBar) view.findViewById(R.id.tripRowImageProgressBar);
-                    progress.setVisibility(View.VISIBLE);
-                    Model.getInstance().loadImage(trip.getImageName(),new Model.GetImageListener() {
-                        @Override
-                        public void onSuccess(Bitmap imagebtmp) {
-                                image.setImageBitmap(imagebtmp);
-                                image.setVisibility(View.VISIBLE);
-                                progress.setVisibility(View.GONE);
-                                trip.setImage(imagebtmp);
-                        }
+            if (trip.getImageName() != null) {
+                final ProgressBar progress = (ProgressBar) view.findViewById(R.id.tripRowImageProgressBar);
+                progress.setVisibility(View.VISIBLE);
+                Model.getInstance().loadImage(trip.getImageName(), new Model.GetImageListener() {
+                    @Override
+                    public void onSuccess(Bitmap imagebtmp) {
+                        image.setImageBitmap(imagebtmp);
+                        image.setVisibility(View.VISIBLE);
+                        progress.setVisibility(View.GONE);
+                    }
 
-                        @Override
-                        public void onFail() {
-                            image.setVisibility(View.VISIBLE);
-                            progress.setVisibility(View.GONE);
-                        }
-                    });
-                }
-                else
-                {
-                    image.setImageBitmap(trip.getImage());
-                    image.setVisibility(View.VISIBLE);
-                }
-
+                    @Override
+                    public void onFail() {
+                        image.setVisibility(View.VISIBLE);
+                        progress.setVisibility(View.GONE);
+                    }
+                });
             } else {
                 image.setImageResource(R.drawable.trip);
                 image.setVisibility(View.VISIBLE);
@@ -175,5 +164,4 @@ public class TripsListFragment extends Fragment {
             return view;
         }
     }
-
 }

@@ -148,22 +148,22 @@ public class Model {
                 @Override
                 public void complete(String url) {
                     trip.setImageName(url);
-                    saveTrip(trip, imageBitmap, listener);
+                    saveTrip(trip, listener);
                 }
 
                 @Override
                 public void fail() {
-                    saveTrip(trip, imageBitmap, listener);
+                    saveTrip(trip, listener);
                 }
             });
         } else {
-            saveTrip(trip, imageBitmap, listener);
+            saveTrip(trip, listener);
         }
     }
 
-    private void saveTrip(final Trip trip, final Bitmap imageBitmap, final AddTripListener listener) {
+    private void saveTrip(final Trip trip, final AddTripListener listener) {
         // Add trip to both firebase and local sql db
-        modelFirebase.addTrip(trip, imageBitmap, new AddTripListener() {
+        modelFirebase.addTrip(trip, new AddTripListener() {
             @Override
             public void onResult() {
                 TripSql.addTrip(Model.getInstance().modelSql.getWritableDB(), trip);
@@ -202,19 +202,58 @@ public class Model {
         public void onCancel();
     }
 
-    public void editTrip(final Trip trip, final EditTripListener listener){
-        modelFirebase.editTrip(trip, new EditTripListener() {
-            @Override
-            public void onResult() {
-                TripSql.editTrip(modelSql.getReadbleDB(), trip);
-                listener.onResult();
-            }
+    public void editTrip(final Trip trip, final Bitmap imageBitmap, final EditTripListener listener) {
 
-            @Override
-            public void onCancel() {
+        // Check if we need to save image or not and act accordingly
+        if (imageBitmap != null) {
+            // Set the image name
+            String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            String imName = "image_" + trip.getId() + "_" + timeStamp + ".jpg";
 
-            }
-        });
+            // Add image to firebase and local storage
+            saveImage(imageBitmap, imName, new Model.SaveImageListener() {
+                @Override
+                public void complete(String url)
+                {
+                    // Edit the trip's image url as well
+                    trip.setImageName(url);
+
+                    // Edit trip
+                    modelFirebase.editTrip(trip, new EditTripListener() {
+                        @Override
+                        public void onResult() {
+                            TripSql.editTrip(modelSql.getReadbleDB(), trip);
+                            listener.onResult();
+                        }
+
+                        @Override
+                        public void onCancel() {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void fail() {
+                    // Edit trip without changing the URL
+
+                }
+            });
+        }
+        else {
+            modelFirebase.editTrip(trip, new EditTripListener() {
+                @Override
+                public void onResult() {
+                    TripSql.editTrip(modelSql.getReadbleDB(), trip);
+                    listener.onResult();
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+        }
     }
 
     private String getLocalImageFileName(String url) {

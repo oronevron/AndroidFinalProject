@@ -54,9 +54,6 @@ public class NewTripFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_new_trip, container, false);
         imageView = (ImageView) view.findViewById(R.id.new_trip_imageview);
 
-        // Set minimum and maximum values for the minimal age number picker
-        setNumberPicker(view);
-
         // Populate values in the types spinner
         setTypesDropDown(view);
 
@@ -87,19 +84,19 @@ public class NewTripFragment extends Fragment {
                 String name;
                 String id;
                 String type;
-                int minimalAge;
+                String description;
 
                 EditText nameEt = (EditText) view.findViewById(R.id.new_trip_name);
                 name = nameEt.getText().toString();
                 Spinner spinner = (Spinner) view.findViewById(R.id.types_spinner);
                 type = spinner.getSelectedItem().toString();
-                NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.new_trip_minimal_age);
-                minimalAge = numberPicker.getValue();
+                EditText descEt = (EditText) view.findViewById(R.id.new_trip_description);
+                description = descEt.getText().toString();
 
                 // Check that there is no empty field
                 if (name != null && !name.isEmpty()) {
 
-                    final Trip trip = new Trip(name, type, minimalAge, difficulty);
+                    final Trip trip = new Trip(name, type, description, difficulty);
 
                     // Get the current user
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -171,13 +168,6 @@ public class NewTripFragment extends Fragment {
             imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
         }
-    }
-
-    private void setNumberPicker(final View view) {
-        NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.new_trip_minimal_age);
-
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(70);
     }
 
     private void setTypesDropDown( final View view) {

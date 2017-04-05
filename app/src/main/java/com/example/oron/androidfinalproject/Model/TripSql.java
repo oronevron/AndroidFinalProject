@@ -12,7 +12,7 @@ public class TripSql {
     final static String TRIP_TABLE_ID = "_id";
     final static String TRIP_TABLE_NAME = "name";
     final static String TRIP_TABLE_TYPE = "type";
-    final static String TRIP_TABLE_AGE_MIN = "age_min";
+    final static String TRIP_TABLE_DESCRIPTION = "description";
     final static String TRIP_TABLE_DIFFICULTY = "difficulty";
     final static String TRIP_TABLE_IMAGE_NAME = "image_name";
     final static String TRIP_TABLE_USER_ID = "user_id";
@@ -22,7 +22,7 @@ public class TripSql {
                 TRIP_TABLE_ID + " TEXT PRIMARY KEY," +
                 TRIP_TABLE_NAME + " TEXT," +
                 TRIP_TABLE_TYPE + " TEXT," +
-                TRIP_TABLE_AGE_MIN + " INTEGER," +
+                TRIP_TABLE_DESCRIPTION + " TEXT," +
                 TRIP_TABLE_DIFFICULTY + " INTEGER," +
                 TRIP_TABLE_IMAGE_NAME + " TEXT," +
                 TRIP_TABLE_USER_ID + " TEXT);");
@@ -40,7 +40,7 @@ public class TripSql {
             int idIndex = cursor.getColumnIndex(TRIP_TABLE_ID);
             int nameIndex = cursor.getColumnIndex(TRIP_TABLE_NAME);
             int typeIndex = cursor.getColumnIndex(TRIP_TABLE_TYPE);
-            int ageMinIndex = cursor.getColumnIndex(TRIP_TABLE_AGE_MIN);
+            int descriptionIndex = cursor.getColumnIndex(TRIP_TABLE_DESCRIPTION);
             int difficultyIndex = cursor.getColumnIndex(TRIP_TABLE_DIFFICULTY);
             int imageNameIndex = cursor.getColumnIndex(TRIP_TABLE_IMAGE_NAME);
             int userIdIndex = cursor.getColumnIndex(TRIP_TABLE_USER_ID);
@@ -48,11 +48,11 @@ public class TripSql {
                 String id = cursor.getString(idIndex);
                 String name = cursor.getString(nameIndex);
                 String type = cursor.getString(typeIndex);
-                Integer age_min = cursor.getInt(ageMinIndex);
+                String description = cursor.getString(descriptionIndex);
                 Integer difficulty = cursor.getInt(difficultyIndex);
                 String imageName = cursor.getString(imageNameIndex);
                 String user_id = cursor.getString(userIdIndex);
-                Trip trip = new Trip(name, type, age_min, difficulty);
+                Trip trip = new Trip(name, type, description, difficulty);
                 trip.setId(id);
                 trip.setImageName(imageName);
                 trip.setUser_id(user_id);
@@ -71,18 +71,18 @@ public class TripSql {
             int idIndex = cursor.getColumnIndex(TRIP_TABLE_ID);
             int nameIndex = cursor.getColumnIndex(TRIP_TABLE_NAME);
             int typeIndex = cursor.getColumnIndex(TRIP_TABLE_TYPE);
-            int ageMinIndex = cursor.getColumnIndex(TRIP_TABLE_AGE_MIN);
+            int descriptionIndex = cursor.getColumnIndex(TRIP_TABLE_DESCRIPTION);
             int difficultyIndex = cursor.getColumnIndex(TRIP_TABLE_DIFFICULTY);
             int imageNameIndex = cursor.getColumnIndex(TRIP_TABLE_IMAGE_NAME);
             int userIdIndex = cursor.getColumnIndex(TRIP_TABLE_USER_ID);
             String trip_id = cursor.getString(idIndex);
             String name = cursor.getString(nameIndex);
             String type = cursor.getString(typeIndex);
-            Integer age_min = cursor.getInt(ageMinIndex);
+            String description = cursor.getString(descriptionIndex);
             Integer difficulty = cursor.getInt(difficultyIndex);
             String imageName = cursor.getString(imageNameIndex);
             String user_id = cursor.getString(userIdIndex);
-            Trip trip = new Trip(name, type, age_min, difficulty);
+            Trip trip = new Trip(name, type, description, difficulty);
             trip.setId(trip_id);
             trip.setImageName(imageName);
             trip.setUser_id(user_id);
@@ -96,7 +96,7 @@ public class TripSql {
         values.put(TRIP_TABLE_ID, trip.getId());
         values.put(TRIP_TABLE_NAME, trip.getName());
         values.put(TRIP_TABLE_TYPE, trip.getType());
-        values.put(TRIP_TABLE_AGE_MIN, trip.getAge_min());
+        values.put(TRIP_TABLE_DESCRIPTION, trip.getDescription());
         values.put(TRIP_TABLE_DIFFICULTY, trip.getDifficulty());
         values.put(TRIP_TABLE_IMAGE_NAME, trip.getImageName());
         values.put(TRIP_TABLE_USER_ID, trip.getUser_id());

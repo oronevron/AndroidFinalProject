@@ -53,7 +53,6 @@
     <string name="new_trip_activity_label">Add new Trip</string>
     <string name="new_trip_save_button">Save</string>
     <string name="new_trip_cancel_button">Cancel</string>
-    <string name="new_trip_minimal_age">Minimal Age:</string>
 
     <!--Edit Trip Activity-->
     <string name="edit_trip_activity_label">Edit Trip</string>
@@ -75,7 +74,7 @@
     <string name="medium">Medium</string>
     <string name="hard">Hard</string>
     <string name="very_hard">Very Hard</string>
-
+    <string name="trip_description">Description:</string>
 
     <!--Error Messages-->
     <string name="action_canceled_message">Action canceled</string>
