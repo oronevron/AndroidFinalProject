@@ -176,7 +176,8 @@ public class EditTripFragment extends Fragment {
                 description = descEt.getText().toString();
 
                 // Check that there is no empty field
-                if (name != null && !name.isEmpty()) {
+                if ((name != null && !name.trim().isEmpty()) &&
+                        (description != null && !description.trim().isEmpty())) {
 
                     // Check if there is at least one change in trip details
                     if (!name.equals(previousTripDetails.getName()) ||
