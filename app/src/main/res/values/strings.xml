@@ -47,7 +47,8 @@
     <string name="register_failure">An error occured with the Registration, please try again later</string>
 
     <!--Main Activity-->
-    <string name="new_trip_button">+</string>
+    <string name="new_trip_button">Add</string>
+    <string name="refresh_button">Refresh</string>
 
     <!--New Trip Activity-->
     <string name="new_trip_activity_label">Add new Trip</string>
@@ -83,5 +84,8 @@
     <string name="edit_trip_success_message">The trip edited successfully</string>
     <string name="edit_trip_error_message">Please change at least one field!</string>
     <string name="edit_trip_delete_message">The trip deleted successfully</string>
+
+    <!--Other Messages-->
+    <string name="refresh_button_message">The trips list is up to date</string>
 
 </resources>

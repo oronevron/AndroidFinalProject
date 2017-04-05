@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.oron.androidfinalproject.MainActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
@@ -188,18 +189,36 @@ public class ModelFirebase {
     }
 
     public void handleDatabaseChanges() {
-        database.getReference("trips").addChildEventListener(new ChildEventListener() {
+        database.getReference("trips").limitToLast(1).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 System.out.println("onChildAdded: " + dataSnapshot.getKey());
+
+                Trip trip = dataSnapshot.getValue(Trip.class);
+                trip.setId(dataSnapshot.getKey());
+
+                if (Model.getInstance().getTripById(trip.getId()) == null) {
+                    MainActivity.changeRefreshButtonIcon(true);
+                }
+
+                if (!trip.getIsDeleted()) {
+                    TripSql.addTrip(Model.getInstance().modelSql.getWritableDB(), trip);
+                }
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
                 System.out.println("onChildChanged: " + dataSnapshot.getKey());
-//                Trip test = TripSql.getTripById(Model.getInstance().modelSql.getReadbleDB(), dataSnapshot.getKey());
-//                TripSql.editTrip(Model.getInstance().modelSql.getWritableDB(), dataSnapshot.getValue(Trip.class));
-//                Trip test2 = TripSql.getTripById(Model.getInstance().modelSql.getReadbleDB(), dataSnapshot.getKey());
+
+                Trip trip = dataSnapshot.getValue(Trip.class);
+                trip.setId(dataSnapshot.getKey());
+                if (!trip.getIsDeleted()) {
+                    TripSql.editTrip(Model.getInstance().modelSql.getWritableDB(), trip);
+                } else {
+                    Model.getInstance().removeImageFromDevice(trip.getImageName());
+                    TripSql.deleteTrip(Model.getInstance().modelSql.getWritableDB(), trip.getId());
+                }
+                MainActivity.changeRefreshButtonIcon(true);
             }
 
             @Override
@@ -219,20 +238,3 @@ public class ModelFirebase {
         });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

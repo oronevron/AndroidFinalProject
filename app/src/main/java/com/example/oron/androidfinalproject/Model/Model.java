@@ -3,6 +3,7 @@ package com.example.oron.androidfinalproject.Model;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
@@ -27,6 +28,7 @@ public class Model {
     ModelFirebase modelFirebase;
     ModelSql modelSql;
     private List<Trip> tripsData = new LinkedList<Trip>();
+//    private boolean isNoUpToDate = false;
 
     private Model() {
 
@@ -65,6 +67,15 @@ public class Model {
 //        return tripsData.get(index);
 //    }
 
+
+//    public boolean isNoUpToDate() {
+//        return isNoUpToDate;
+//    }
+//
+//    public void setNoUpToDate(boolean noUpToDate) {
+//        isNoUpToDate = noUpToDate;
+//    }
+
     public interface GetTripsListener{
         public void onResult(List<Trip> trips, List<Trip> tripsToDelete);
         public void onCancel();
@@ -96,6 +107,7 @@ public class Model {
 
                 if(tripsToDelete != null && tripsToDelete.size() > 0) {
                     for (Trip tripToDelete : tripsToDelete) {
+                        removeImageFromDevice(tripToDelete.getImageName());
                         TripSql.deleteTrip(modelSql.getWritableDB(), tripToDelete.getId());
                     }
                 }
@@ -186,6 +198,7 @@ public class Model {
         modelFirebase.deleteTrip(id, new DeleteTripListener() {
             @Override
             public void onResult(String id) {
+                removeImageFromDevice(TripSql.getTripById(modelSql.getReadbleDB(), id).getImageName());
                 TripSql.deleteTrip(modelSql.getReadbleDB(), id);
                 listener.onResult(id);
             }
@@ -292,6 +305,12 @@ public class Model {
         MyApplication.getAppContext().sendBroadcast(mediaScanIntent);
     }
 
+    private void refreshGallery(){
+        MediaScannerConnection.scanFile(MyApplication.getAppContext(),
+                new String[] { Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() },
+                null, null);
+    }
+
     private void saveImageToFile(Bitmap imageBitmap, String imageFileName){
         try {
             File dir = Environment.getExternalStoragePublicDirectory(
@@ -311,6 +330,21 @@ public class Model {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void removeImageFromDevice(String imageFileName) {
+        String localFileName = getLocalImageFileName(imageFileName);
+        File dir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File fdelete = new File(dir + "/" + localFileName);
+        if (fdelete.exists()) {
+            if (fdelete.delete()) {
+                refreshGallery();
+                System.out.println("file Deleted :" + dir + "/" + localFileName);
+            } else {
+                System.out.println("file not Deleted :" + dir + "/" + localFileName);
+            }
         }
     }
 
