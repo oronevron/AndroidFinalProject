@@ -33,7 +33,7 @@ public class TripSql {
     }
 
     public static List<Trip> getAllTrips(SQLiteDatabase db) {
-        Cursor cursor = db.query(TRIP_TABLE, null, null , null, null, null, null);
+        Cursor cursor = db.query(TRIP_TABLE, null, null , null, null, null, TRIP_TABLE_NAME);
         List<Trip> trips = new LinkedList<Trip>();
 
         if (cursor.moveToFirst()) {

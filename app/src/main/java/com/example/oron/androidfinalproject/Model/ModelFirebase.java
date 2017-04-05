@@ -8,6 +8,8 @@ import android.util.Log;
 import com.example.oron.androidfinalproject.MainActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -189,7 +191,7 @@ public class ModelFirebase {
     }
 
     public void handleDatabaseChanges() {
-        database.getReference("trips").limitToLast(1).addChildEventListener(new ChildEventListener() {
+        database.getReference("trips").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 System.out.println("onChildAdded: " + dataSnapshot.getKey());
@@ -199,7 +201,11 @@ public class ModelFirebase {
 
                 if (!trip.getIsDeleted()) {
                     if (Model.getInstance().getTripById(trip.getId()) == null) {
-                        MainActivity.changeRefreshButtonIcon(true);
+                        // Get the current user and check if it is different than the user that created the trip
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (!user.getUid().equals(trip.getUser_id())) {
+                            MainActivity.changeRefreshButtonIcon(true);
+                        }
                     }
 
                     TripSql.addTrip(Model.getInstance().modelSql.getWritableDB(), trip);
@@ -210,15 +216,21 @@ public class ModelFirebase {
             public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
                 System.out.println("onChildChanged: " + dataSnapshot.getKey());
 
+                // Get the current user
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
                 Trip trip = dataSnapshot.getValue(Trip.class);
                 trip.setId(dataSnapshot.getKey());
                 if (!trip.getIsDeleted()) {
                     TripSql.editTrip(Model.getInstance().modelSql.getWritableDB(), trip);
-                } else {
+                } else if (!user.getUid().equals(trip.getUser_id())) {
                     Model.getInstance().removeImageFromDevice(trip.getImageName());
                     TripSql.deleteTrip(Model.getInstance().modelSql.getWritableDB(), trip.getId());
                 }
-                MainActivity.changeRefreshButtonIcon(true);
+
+                if (!user.getUid().equals(trip.getUser_id())) {
+                    MainActivity.changeRefreshButtonIcon(true);
+                }
             }
 
             @Override
@@ -228,6 +240,7 @@ public class ModelFirebase {
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
                 System.out.println("onChildMoved");
             }
 
