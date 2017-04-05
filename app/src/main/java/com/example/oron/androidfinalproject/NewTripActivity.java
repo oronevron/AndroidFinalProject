@@ -11,6 +11,7 @@ public class NewTripActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_trip);
 
+        // Create edit trip fragment and call it
         NewTripFragment newTripFragment = new NewTripFragment();
         FragmentTransaction ftr = getFragmentManager().beginTransaction();
         ftr.add(R.id.newTripContainer, newTripFragment);

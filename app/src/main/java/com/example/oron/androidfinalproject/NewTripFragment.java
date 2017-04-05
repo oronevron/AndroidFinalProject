@@ -1,6 +1,5 @@
 package com.example.oron.androidfinalproject;
 
-
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -13,24 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.oron.androidfinalproject.Model.Model;
 import com.example.oron.androidfinalproject.Model.Trip;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,7 +35,6 @@ public class NewTripFragment extends Fragment {
     Bitmap imageBitmap = null;
     int difficulty = 0;
 
-
     public NewTripFragment() {
         // Required empty public constructor
     }
@@ -51,7 +43,10 @@ public class NewTripFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // Inflate the view from the XML
         final View view = inflater.inflate(R.layout.fragment_new_trip, container, false);
+
+        // Get the image view of the view
         imageView = (ImageView) view.findViewById(R.id.new_trip_imageview);
 
         // Populate values in the types spinner
@@ -65,6 +60,7 @@ public class NewTripFragment extends Fragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Show relevant message
                 DialogFragment dialog = new MessagesAlertDialog();
                 Bundle args = new Bundle();
                 args.putInt("resultCode", Activity.RESULT_CANCELED);
@@ -86,6 +82,7 @@ public class NewTripFragment extends Fragment {
                 String type;
                 String description;
 
+                // Get the values of the view's fields
                 EditText nameEt = (EditText) view.findViewById(R.id.new_trip_name);
                 name = nameEt.getText().toString();
                 Spinner spinner = (Spinner) view.findViewById(R.id.types_spinner);
@@ -96,6 +93,7 @@ public class NewTripFragment extends Fragment {
                 // Check that there is no empty field
                 if (name != null && !name.isEmpty()) {
 
+                    // Create new trip and set the relevant values
                     final Trip trip = new Trip(name, type, description, difficulty);
 
                     // Get the current user
@@ -105,9 +103,11 @@ public class NewTripFragment extends Fragment {
                     // This will be used later to allow only this user to edit or delete the trip
                     trip.setUser_id(user.getUid());
 
+                    // Add the trip in databases
                     Model.getInstance().addTrip(trip, imageBitmap, new Model.AddTripListener() {
                         @Override
                         public void onResult() {
+                            // Show relevant message
                             DialogFragment dialog = new MessagesAlertDialog();
                             Bundle args = new Bundle();
                             args.putInt("resultCode", Activity.RESULT_OK);
@@ -121,10 +121,14 @@ public class NewTripFragment extends Fragment {
                         @Override
                         public void onCancel() {
 
+                            // Show relevant message
+                            Toast.makeText(getActivity(), getString(R.string.add_trip_failed), Toast.LENGTH_LONG);
                         }
                     });
                 }
+                // If there is a empty field
                 else {
+                    // Show relevant message
                     DialogFragment dialog = new MessagesAlertDialog();
                     Bundle args = new Bundle();
                     args.putInt("messageCode", R.string.new_or_edit_trip_error_message);
@@ -135,9 +139,11 @@ public class NewTripFragment extends Fragment {
             }
         });
 
+        // Set click handler for the image view
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Take picture from the user
                 takingPicture();
             }
         });
@@ -146,15 +152,10 @@ public class NewTripFragment extends Fragment {
         return view;
     }
 
-//    private void saveTripAndClose(Trip trip){
-//        if (trip != null){
-//            Model.getInstance().addTrip(trip, imageBitmap);
-//        }
-//    }
-
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private void takingPicture(){
+        // Start the camera in order to take picture from the user
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -163,6 +164,7 @@ public class NewTripFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Handle the processing of the image from the user
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
@@ -190,10 +192,8 @@ public class NewTripFragment extends Fragment {
 
         // Handle seek bar change event
         SeekBar seekBar = (SeekBar) view.findViewById(R.id.new_trip_difficulty);
-
         seekBar.setOnSeekBarChangeListener(
                 new OnSeekBarChangeListener() {
-
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar,
@@ -202,6 +202,7 @@ public class NewTripFragment extends Fragment {
                         // Get the trip difficulty text view
                         TextView textView = (TextView) view.findViewById(R.id.new_trip_difficulty_value);
 
+                        // Set text in the difficulty field according to the value
                         switch (progresValue) {
                             case 0: textView.setText(getResources().getString(R.string.very_easy));
                                 difficulty = 0;

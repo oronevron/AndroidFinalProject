@@ -6,17 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.example.oron.androidfinalproject.Model.Model;
 import com.example.oron.androidfinalproject.Model.Trip;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -71,35 +67,36 @@ public class MainActivity extends AppCompatActivity {
         // New trip has been created
         if (requestCode == 1) {
             if (resultCode == Activity.RESULT_OK) {
-                List<Trip> trips = Model.getInstance().refreshTripsList();
-                tripsListFragment.setTripsList(trips);
-                tripsListFragment.getAdapter().notifyDataSetChanged();
-                tripsListFragment.getList().setSelection(trips.size());
+                // Refresh the trips list
+                refreshTripsList();
             }
         }
 
         // Trip has been deleted
         else if (requestCode == 2) {
             if (resultCode == Activity.RESULT_FIRST_USER) {
-                tripsListFragment.setTripsList(Model.getInstance().refreshTripsList());
-                tripsListFragment.getAdapter().notifyDataSetChanged();
-                tripsListFragment.getList().setSelection(0);
+                // Refresh the trips list
+                refreshTripsList();
             }
 
             // Trip has been edited
             else if (resultCode == Activity.RESULT_OK) {
-                tripsListFragment.setTripsList(Model.getInstance().refreshTripsList());
-                tripsListFragment.getAdapter().notifyDataSetChanged();
-                tripsListFragment.getList().setSelection((int)data.getExtras().get("tripIndex"));
+                // Refresh the trips list
+                refreshTripsList();
             }
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate the menu from the XML
         getMenuInflater().inflate(R.menu.activity_main_menu, menu);
 
+        // Save reference to the refresh button for further processing
         refreshButton = menu.findItem(R.id.refresh_button);
+
+        // Set the icon of the refresh button to "no updates"
         changeRefreshButtonIcon(false);
 
         return super.onCreateOptionsMenu(menu);
@@ -114,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             // Handle click on new trip button
             case R.id.new_trip_button:
 
+                // Start the new trip activity
                 Intent intent = new Intent(getApplicationContext(), NewTripActivity.class);
                 startActivityForResult(intent, 1);
 
@@ -121,9 +119,14 @@ public class MainActivity extends AppCompatActivity {
 
             // Handle click on refresh button
             case R.id.refresh_button:
-                tripsListFragment.setTripsList(Model.getInstance().refreshTripsList());
-                tripsListFragment.getAdapter().notifyDataSetChanged();
+
+                // Refresh the trips list
+                refreshTripsList();
+
+                // Show relevant message
                 Toast.makeText(this, R.string.refresh_button_message, Toast.LENGTH_LONG).show();
+
+                // Set the icon of the refresh button to "no updates"
                 changeRefreshButtonIcon(false);
 
                 return true;
@@ -135,9 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 auth.signOut();
 
                 return true;
-
-//            default:
-//                return super.onOptionsItemSelected(item);
         }
         return false;
     }
@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void changeRefreshButtonIcon(boolean isNoUpToDate) {
+        // Change the icon of the refresh button (black - "updates" / white - "no updates") according to the parameter
         if (isNoUpToDate) {
             refreshButton.setIcon(R.drawable.ic_refresh_black_24dp);
         } else {
@@ -164,4 +165,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void refreshTripsList() {
+        // Refresh the trips list
+        tripsListFragment.setTripsList(Model.getInstance().refreshTripsList());
+        tripsListFragment.getAdapter().notifyDataSetChanged();
+
+        // Set the currently selected item to the first item
+        tripsListFragment.getList().setSelection(0);
+    }
 }

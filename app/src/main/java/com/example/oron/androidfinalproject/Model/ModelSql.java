@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.List;
 
 public class ModelSql {
-    final static int VERSION = 42;
+    final static int VERSION = 48;
 
     Helper sqlDb;
 
@@ -30,14 +30,20 @@ public class ModelSql {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
+
+            // Create both trips and last upadte time tables
             TripSql.create(db);
             LastUpdateSql.create(db);
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+            // Drop both trips and last upadte time tables
             TripSql.drop(db);
             LastUpdateSql.drop(db);
+
+            // Recreate both trips and last upadte time tables
             onCreate(db);
         }
     }

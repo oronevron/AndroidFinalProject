@@ -12,14 +12,15 @@ public class EditTripActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_trip);
 
-        // Get trip details and show them
+        // Get trip details
         Intent intent = getIntent();
-//        int index = (int) intent.getExtras().get("tripIndex");
         String index = intent.getExtras().get("tripIndex").toString();
+
+        // Prepare the parameter for the fragment
         Bundle bundle = new Bundle();
-//        bundle.putInt("tripIndex", index);
         bundle.putString("tripIndex", index);
 
+        // Create edit trip fragment and call it with the parameter
         EditTripFragment editTripFragment = new EditTripFragment();
         editTripFragment.setArguments(bundle);
         FragmentTransaction ftr = getFragmentManager().beginTransaction();

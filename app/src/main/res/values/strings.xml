@@ -84,6 +84,11 @@
     <string name="edit_trip_success_message">The trip edited successfully</string>
     <string name="edit_trip_error_message">Please change at least one field!</string>
     <string name="edit_trip_delete_message">The trip deleted successfully</string>
+    <string name="image_loading_failed">An error occured while image loading</string>
+    <string name="remove_trip_failed">An error occured while trip removing</string>
+    <string name="edit_trip_failed">An error occured while trip editing</string>
+    <string name="add_trip_failed">An error occured while trip adding</string>
+    <string name="trips_fetch_failed">An error occured while trips fetching</string>
 
     <!--Other Messages-->
     <string name="refresh_button_message">The trips list is up to date</string>

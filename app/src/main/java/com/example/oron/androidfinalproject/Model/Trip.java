@@ -1,7 +1,5 @@
 package com.example.oron.androidfinalproject.Model;
 
-import android.graphics.Bitmap;
-
 import com.google.firebase.database.ServerValue;
 
 import java.util.HashMap;
@@ -18,7 +16,7 @@ public class Trip {
     private double lastUpdated;
     private boolean isDeleted;
 
-    public Trip(String name, String type, String description, int difficulty) {// int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minute) {
+    public Trip(String name, String type, String description, int difficulty) {
         this.name = name;
         this.type = type;
         this.description = description;
@@ -100,6 +98,7 @@ public class Trip {
     }
 
     public Map<String, Object> toMap() {
+        // Return a map with trip details - relevant for the working with Firebase
         HashMap<String, Object> result = new HashMap<>();
         result.put("name", name);
         result.put("imageName", imageName);
