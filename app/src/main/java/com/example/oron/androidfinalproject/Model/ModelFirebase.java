@@ -197,11 +197,11 @@ public class ModelFirebase {
                 Trip trip = dataSnapshot.getValue(Trip.class);
                 trip.setId(dataSnapshot.getKey());
 
-                if (Model.getInstance().getTripById(trip.getId()) == null) {
-                    MainActivity.changeRefreshButtonIcon(true);
-                }
-
                 if (!trip.getIsDeleted()) {
+                    if (Model.getInstance().getTripById(trip.getId()) == null) {
+                        MainActivity.changeRefreshButtonIcon(true);
+                    }
+
                     TripSql.addTrip(Model.getInstance().modelSql.getWritableDB(), trip);
                 }
             }

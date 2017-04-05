@@ -22,10 +22,8 @@ public class TripDetailsActivity extends AppCompatActivity {
 
         // Get trip details and show them
         Intent intent = getIntent();
-//        int index = (int) intent.getExtras().get("tripIndex");
         String index = intent.getExtras().get("tripIndex").toString();
         Bundle bundle = new Bundle();
-//        bundle.putInt("tripIndex", index);
         bundle.putString("tripIndex", index);
 
         TripDetailsFragment tripDetailsFragment = new TripDetailsFragment();
@@ -91,7 +89,6 @@ public class TripDetailsActivity extends AppCompatActivity {
 
                 // Handle click on edit button
                 Intent intent = getIntent();
-//                int index = (int) intent.getExtras().get("tripIndex");
                 String index = intent.getExtras().get("tripIndex").toString();
                 Intent intentNew = new Intent(getApplicationContext(), EditTripActivity.class);
                 intentNew.putExtra("tripIndex", index);
