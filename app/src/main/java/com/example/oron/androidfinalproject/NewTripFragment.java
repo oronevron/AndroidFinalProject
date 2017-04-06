@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
@@ -33,6 +34,7 @@ public class NewTripFragment extends Fragment {
     ImageView imageView = null;
     String imageFileName = null;
     Bitmap imageBitmap = null;
+    private ProgressBar progressBar;
     int difficulty = 0;
 
     public NewTripFragment() {
@@ -49,6 +51,9 @@ public class NewTripFragment extends Fragment {
         // Get the image view of the view
         imageView = (ImageView) view.findViewById(R.id.new_trip_imageview);
 
+        // Get the progress bar
+        progressBar = (ProgressBar) view.findViewById(R.id.new_progressBar);
+
         // Populate values in the types spinner
         setTypesDropDown(view);
 
@@ -56,7 +61,7 @@ public class NewTripFragment extends Fragment {
         setDifficultySlider(view);
 
         // Handle click on cancel button
-        Button cancelBtn = (Button) view.findViewById(R.id.new_trip_cancel_button);
+        final Button cancelBtn = (Button) view.findViewById(R.id.new_trip_cancel_button);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +78,7 @@ public class NewTripFragment extends Fragment {
         });
 
         // Handle click on save button
-        Button saveBtn = (Button) view.findViewById(R.id.new_trip_save_button);
+        final Button saveBtn = (Button) view.findViewById(R.id.new_trip_save_button);
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,10 +109,17 @@ public class NewTripFragment extends Fragment {
                     // This will be used later to allow only this user to edit or delete the trip
                     trip.setUser_id(user.getUid());
 
+                    progressBar.setVisibility(View.VISIBLE);
+                    saveBtn.setVisibility(View.GONE);
+                    cancelBtn.setVisibility(View.GONE);
+
                     // Add the trip in databases
                     Model.getInstance().addTrip(trip, imageBitmap, new Model.AddTripListener() {
                         @Override
                         public void onResult() {
+
+                            progressBar.setVisibility(View.GONE);
+
                             // Show relevant message
                             DialogFragment dialog = new MessagesAlertDialog();
                             Bundle args = new Bundle();

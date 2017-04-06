@@ -34,6 +34,7 @@ public class EditTripFragment extends Fragment {
     Bitmap imageBitmap = null;
     private Trip previousTripDetails;
     int difficulty = 0;
+    private ProgressBar progressBar;
     boolean imageChanged = false;
 
     public EditTripFragment() {
@@ -59,6 +60,9 @@ public class EditTripFragment extends Fragment {
                 takingPicture();
             }
         });
+
+        // Get the progress bar
+        progressBar = (ProgressBar) view.findViewById(R.id.edit_progressBar);
 
         // Get the id of the required trip
         final String index = this.getArguments().getString("tripIndex");
@@ -150,10 +154,16 @@ public class EditTripFragment extends Fragment {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                progressBar.setVisibility(View.VISIBLE);
+
                 // Delete the trip from databases
                 Model.getInstance().deleteTrip(index, new Model.DeleteTripListener() {
                     @Override
                     public void onResult(String id) {
+
+                        progressBar.setVisibility(View.GONE);
+
                         // Show relevant message
                         DialogFragment dialog = new MessagesAlertDialog();
                         Bundle args = new Bundle();
@@ -208,10 +218,15 @@ public class EditTripFragment extends Fragment {
                         tripToEdit.setImageName(trip.getImageName());
                         tripToEdit.setUser_id(trip.getUser_id());
 
+                        progressBar.setVisibility(View.VISIBLE);
+
                         // Edit the trip in databases
                         Model.getInstance().editTrip(tripToEdit, imageBitmap, new Model.EditTripListener() {
                             @Override
                             public void onResult() {
+
+                                progressBar.setVisibility(View.GONE);
+
                                 Intent intent = new Intent();
                                 intent.putExtra("tripIndex", index);
 
