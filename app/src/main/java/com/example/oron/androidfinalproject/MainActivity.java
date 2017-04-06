@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
@@ -95,6 +96,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Save reference to the refresh button for further processing
         refreshButton = menu.findItem(R.id.refresh_button);
+
+        if (!CheckNetwork.isInternetAvailable(MyApplication.getAppContext())) {
+            refreshButton.setVisible(false);
+            menu.findItem(R.id.new_trip_button).setVisible(false);
+        }
 
         // Set the icon of the refresh button to "no updates"
         changeRefreshButtonIcon(false);

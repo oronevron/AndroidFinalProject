@@ -57,6 +57,10 @@ public class TripsListFragment extends Fragment {
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.tripsListProgressBar);
         progressBar.setVisibility(View.VISIBLE);
 
+        list = (ListView) view.findViewById(R.id.tripsListListView);
+        adapter = new TripsAdapter();
+        list.setAdapter(adapter);
+
         // Get all trips from databases
         Model.getInstance().getAllTripsAsynch(new Model.GetTripsListener() {
             @Override
@@ -68,6 +72,10 @@ public class TripsListFragment extends Fragment {
                 // Set the trips list and refresh the displayed list
                 tripsList = trips;
                 adapter.notifyDataSetChanged();
+
+                if (!CheckNetwork.isInternetAvailable(MyApplication.getAppContext())) {
+                    Toast.makeText(getActivity(), R.string.no_network, Toast.LENGTH_LONG);
+                }
             }
 
             @Override
@@ -81,9 +89,9 @@ public class TripsListFragment extends Fragment {
         });
 
         // Connect the adapter to the list in order to show the data
-        list = (ListView) view.findViewById(R.id.tripsListListView);
-        adapter = new TripsAdapter();
-        list.setAdapter(adapter);
+//        list = (ListView) view.findViewById(R.id.tripsListListView);
+//        adapter = new TripsAdapter();
+//        list.setAdapter(adapter);
 
         // Handle click on a row in the list
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

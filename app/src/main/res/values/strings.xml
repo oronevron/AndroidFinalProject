@@ -89,6 +89,7 @@
     <string name="edit_trip_failed">An error occured while trip editing</string>
     <string name="add_trip_failed">An error occured while trip adding</string>
     <string name="trips_fetch_failed">An error occured while trips fetching</string>
+    <string name="no_network">There is no internet connection, you can only watch the trips list</string>
 
     <!--Other Messages-->
     <string name="refresh_button_message">The trips list is up to date</string>

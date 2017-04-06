@@ -77,7 +77,7 @@ public class TripDetailsActivity extends AppCompatActivity {
 
         // If the user isn't the trip's creator, hide the edit button
         // Otherwist, show it
-        if(!userId.equals(tripCreatorId))
+        if((!userId.equals(tripCreatorId) || (!CheckNetwork.isInternetAvailable(MyApplication.getAppContext()))))
         {
             editItem.setVisible(false);
         }

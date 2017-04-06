@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.webkit.URLUtil;
 
+import com.example.oron.androidfinalproject.CheckNetwork;
 import com.example.oron.androidfinalproject.MyApplication;
 
 import java.io.File;
@@ -48,64 +49,74 @@ public class Model {
         public void onCancel();
     }
 
-    public void getAllTripsAsynch(final GetTripsListener listener){
+    public void getAllTripsAsynch(final GetTripsListener listener) {
 
-        // Get the last update time
-        final double lastUpdateDate = TripSql.getLastUpdateDate(modelSql.getReadbleDB());
+        if (CheckNetwork.isInternetAvailable(MyApplication.getAppContext())) {
 
-        // Get all trips records from Firebase that where updated since local last update time
-        modelFirebase.getAllTripsAsynch(lastUpdateDate, new GetTripsListener() {
-            @Override
-            public void onResult(List<Trip> trips, List<Trip> tripsToDelete) {
 
-                // Check if there is trips that added/updated since local last update time
-                if(trips != null && trips.size() > 0) {
+            // Get the last update time
+            final double lastUpdateDate = TripSql.getLastUpdateDate(modelSql.getReadbleDB());
 
-                    // Init the variable that will contain the maximum last update time with the value of the current local last update time
-                    double recentUpdate = lastUpdateDate;
+            // Get all trips records from Firebase that where updated since local last update time
+            modelFirebase.getAllTripsAsynch(lastUpdateDate, new GetTripsListener() {
+                @Override
+                public void onResult(List<Trip> trips, List<Trip> tripsToDelete) {
 
-                    // Loop over all these trips
-                    for (Trip trip : trips) {
+                    // Check if there is trips that added/updated since local last update time
+                    if (trips != null && trips.size() > 0) {
 
-                        // Add the current trip to the local database
-                        TripSql.addTrip(modelSql.getWritableDB(), trip);
+                        // Init the variable that will contain the maximum last update time with the value of the current local last update time
+                        double recentUpdate = lastUpdateDate;
 
-                        // Get the maximum last update time
-                        if (trip.getLastUpdated() > recentUpdate) {
-                            recentUpdate = trip.getLastUpdated();
+                        // Loop over all these trips
+                        for (Trip trip : trips) {
+
+                            // Add the current trip to the local database
+                            TripSql.addTrip(modelSql.getWritableDB(), trip);
+
+                            // Get the maximum last update time
+                            if (trip.getLastUpdated() > recentUpdate) {
+                                recentUpdate = trip.getLastUpdated();
+                            }
+                        }
+
+                        // Set the last update time as the maximum we find
+                        TripSql.setLastUpdateDate(modelSql.getWritableDB(), recentUpdate);
+                    }
+
+                    // Check if there is trips that deleted since local last update time
+                    if (tripsToDelete != null && tripsToDelete.size() > 0) {
+
+                        // Loop over all these trips
+                        for (Trip tripToDelete : tripsToDelete) {
+
+                            // Remove trip's image from the device
+                            removeImageFromDevice(tripToDelete.getImageName());
+
+                            // Delete the trip from the local database
+                            TripSql.deleteTrip(modelSql.getWritableDB(), tripToDelete.getId());
                         }
                     }
 
-                    // Set the last update time as the maximum we find
-                    TripSql.setLastUpdateDate(modelSql.getWritableDB(), recentUpdate);
+                    // Return the complete trip list (ordered by trip name) to the caller
+                    List<Trip> tripsList = TripSql.getAllTrips(modelSql.getReadbleDB());
+                    listener.onResult(tripsList, null);
                 }
 
-                // Check if there is trips that deleted since local last update time
-                if(tripsToDelete != null && tripsToDelete.size() > 0) {
+                @Override
+                public void onCancel() {
 
-                    // Loop over all these trips
-                    for (Trip tripToDelete : tripsToDelete) {
-
-                        // Remove trip's image from the device
-                        removeImageFromDevice(tripToDelete.getImageName());
-
-                        // Delete the trip from the local database
-                        TripSql.deleteTrip(modelSql.getWritableDB(), tripToDelete.getId());
-                    }
+                    // Call listener's onCancel method
+                    listener.onCancel();
                 }
-
-                // Return the complete trip list (ordered by trip name) to the caller
-                List<Trip> tripsList = TripSql.getAllTrips(modelSql.getReadbleDB());
-                listener.onResult(tripsList, null);
-            }
-
-            @Override
-            public void onCancel() {
-
-                // Call listener's onCancel method
-                listener.onCancel();
-            }
-        });
+            });
+        }
+        else
+        {
+            // Return the complete trip list (ordered by trip name) to the caller
+            List<Trip> tripsList = TripSql.getAllTrips(modelSql.getReadbleDB());
+            listener.onResult(tripsList, null);
+        }
     }
 
     public List<Trip> refreshTripsList() {
