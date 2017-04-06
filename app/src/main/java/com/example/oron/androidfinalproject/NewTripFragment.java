@@ -91,7 +91,8 @@ public class NewTripFragment extends Fragment {
                 description = descEt.getText().toString();
 
                 // Check that there is no empty field
-                if (name != null && !name.isEmpty()) {
+                if ((name != null && !name.trim().isEmpty()) &&
+                    (description != null && !description.trim().isEmpty())) {
 
                     // Create new trip and set the relevant values
                     final Trip trip = new Trip(name, type, description, difficulty);
